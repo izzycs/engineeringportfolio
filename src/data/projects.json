@@ -1,0 +1,29 @@
+[
+  {
+    "id": "dq-dashboard",
+    "title": "Data Quality Rule Catalog Dashboard",
+    "description": "Interactive dashboard for monitoring and managing data quality rules across datasets.",
+    "stack": ["React", "TypeScript", "SQL", "AWS"],
+    "image": "/assets/placeholder-project.png",
+    "link": "#",
+    "github": "#"
+  },
+  {
+    "id": "dev-room",
+    "title": "3D Developer Room Portfolio",
+    "description": "This site! An interactive Three.js portfolio inspired by creative developer portfolios.",
+    "stack": ["React", "Three.js", "TypeScript", "R3F"],
+    "image": "/assets/placeholder-project.png",
+    "link": "#",
+    "github": "#"
+  },
+  {
+    "id": "automation-pipeline",
+    "title": "Automation Pipeline",
+    "description": "Automated data processing pipeline with scheduling, monitoring, and alerting.",
+    "stack": ["Python", "Airflow", "Docker", "AWS"],
+    "image": "/assets/placeholder-project.png",
+    "link": "#",
+    "github": "#"
+  }
+]
