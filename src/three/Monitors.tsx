@@ -117,15 +117,15 @@ export function Monitors() {
   );
 
   return (
-    <group position={[0, 0.78, -0.3]}>
+    <group position={[0, 1.13, -0.3]}>
       {/* Dual Monitor Arm - Center Post */}
       <mesh position={[0, -0.4, -0.1]} castShadow={castShadow}>
         <cylinderGeometry args={[0.02, 0.02, 0.8, 12]} />
         <meshStandardMaterial color="#8A8A8A" roughness={0.3} metalness={0.8} />
       </mesh>
 
-      {/* Monitor Arm Base */}
-      <mesh position={[0, -0.8, -0.1]} castShadow={castShadow}>
+      {/* Monitor Arm Base - sits ON desk surface */}
+      <mesh position={[0, -0.805, -0.1]} castShadow={castShadow}>
         <cylinderGeometry args={[0.1, 0.1, 0.02, 16]} />
         <meshStandardMaterial color="#6A6A6A" roughness={0.3} metalness={0.8} />
       </mesh>

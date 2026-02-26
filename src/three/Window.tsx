@@ -1,43 +1,9 @@
-import { useRef, useEffect } from 'react';
-import { useFrame } from '@react-three/fiber';
 import { useStore } from '../store/useStore';
-import * as THREE from 'three';
-
-const skyColors = {
-  day: { top: '#87CEEB', bottom: '#E0F6FF' },
-  golden: { top: '#FF6B35', bottom: '#FFD93D' },
-  night: { top: '#0B1026', bottom: '#1A1F3A' },
-};
 
 export function Window() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const timeOfDay = useStore((state) => state.timeOfDay);
-  const cycleSpeed = useStore((state) => state.cycleSpeed);
-  const setTimeOfDay = useStore((state) => state.setTimeOfDay);
   const setCameraTarget = useStore((state) => state.setCameraTarget);
   const quality = useStore((state) => state.quality);
   const castShadow = quality === 'high';
-
-  // Auto-cycle through time of day
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeOfDay(
-        timeOfDay === 'day' ? 'golden' : timeOfDay === 'golden' ? 'night' : 'day'
-      );
-    }, 15000 / cycleSpeed); // 15 seconds per phase, adjusted by speed
-
-    return () => clearInterval(interval);
-  }, [timeOfDay, cycleSpeed, setTimeOfDay]);
-
-  const currentColors = skyColors[timeOfDay];
-
-  // Animated stars for night
-  const stars = useRef<THREE.Points>(null);
-  useFrame((state) => {
-    if (stars.current && timeOfDay === 'night') {
-      stars.current.rotation.z = state.clock.elapsedTime * 0.05;
-    }
-  });
 
   const handleClick = () => {
     setCameraTarget('window');
@@ -45,7 +11,8 @@ export function Window() {
 
   return (
     <group
-      position={[2.5, 2, -2]}
+      position={[4.95, 2, 0]}
+      rotation={[0, -Math.PI / 2, 0]}
       onClick={handleClick}
       onPointerOver={(e) => {
         e.stopPropagation();
@@ -62,39 +29,70 @@ export function Window() {
         <meshStandardMaterial color="#654321" roughness={0.7} metalness={0.1} />
       </mesh>
 
-      {/* Sky - Top Half */}
-      <mesh ref={meshRef} position={[0, 0.4, 0]}>
-        <planeGeometry args={[1.0, 0.7]} />
-        <meshBasicMaterial color={currentColors.top} />
+      {/* DC Skyline - Sky Background */}
+      <mesh position={[0, 0.3, 0]}>
+        <planeGeometry args={[1.0, 1.0]} />
+        <meshBasicMaterial color="#87CEEB" />
       </mesh>
 
-      {/* Sky - Bottom Half (gradient effect) */}
-      <mesh position={[0, -0.4, 0]}>
-        <planeGeometry args={[1.0, 0.7]} />
-        <meshBasicMaterial color={currentColors.bottom} />
+      {/* Ground/Horizon */}
+      <mesh position={[0, -0.5, 0.001]}>
+        <planeGeometry args={[1.0, 0.5]} />
+        <meshBasicMaterial color="#2D5016" />
       </mesh>
 
-      {/* Stars (only visible at night) */}
-      {timeOfDay === 'night' && (
-        <points ref={stars} position={[0, 0, 0.01]}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              args={[
-                new Float32Array(
-                  Array.from({ length: 50 }, () => [
-                    (Math.random() - 0.5) * 0.9,
-                    (Math.random() - 0.5) * 1.4,
-                    0,
-                  ]).flat()
-                ),
-                3
-              ]}
-            />
-          </bufferGeometry>
-          <pointsMaterial size={0.01} color="#FFFFFF" />
-        </points>
-      )}
+      {/* Washington Monument - Tall obelisk */}
+      <mesh position={[-0.3, 0.1, 0.002]}>
+        <boxGeometry args={[0.04, 0.35, 0.001]} />
+        <meshBasicMaterial color="#E8E8E8" />
+      </mesh>
+      <mesh position={[-0.3, 0.29, 0.002]}>
+        <coneGeometry args={[0.025, 0.04, 4]} />
+        <meshBasicMaterial color="#E8E8E8" />
+      </mesh>
+
+      {/* US Capitol Dome - Dome shape */}
+      <mesh position={[0.25, 0, 0.002]}>
+        <boxGeometry args={[0.12, 0.15, 0.001]} />
+        <meshBasicMaterial color="#F5F5F5" />
+      </mesh>
+      <mesh position={[0.25, 0.08, 0.002]}>
+        <sphereGeometry args={[0.07, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
+        <meshBasicMaterial color="#F5F5F5" />
+      </mesh>
+      {/* Capitol columns */}
+      <mesh position={[0.19, -0.03, 0.002]}>
+        <boxGeometry args={[0.01, 0.08, 0.001]} />
+        <meshBasicMaterial color="#E0E0E0" />
+      </mesh>
+      <mesh position={[0.25, -0.03, 0.002]}>
+        <boxGeometry args={[0.01, 0.08, 0.001]} />
+        <meshBasicMaterial color="#E0E0E0" />
+      </mesh>
+      <mesh position={[0.31, -0.03, 0.002]}>
+        <boxGeometry args={[0.01, 0.08, 0.001]} />
+        <meshBasicMaterial color="#E0E0E0" />
+      </mesh>
+
+      {/* Lincoln Memorial - Greek temple style */}
+      <mesh position={[-0.05, -0.05, 0.002]}>
+        <boxGeometry args={[0.1, 0.12, 0.001]} />
+        <meshBasicMaterial color="#F0F0F0" />
+      </mesh>
+      <mesh position={[-0.05, 0.02, 0.002]}>
+        <boxGeometry args={[0.11, 0.02, 0.001]} />
+        <meshBasicMaterial color="#D0D0D0" />
+      </mesh>
+
+      {/* Some trees/greenery silhouettes */}
+      <mesh position={[0.4, -0.15, 0.002]}>
+        <coneGeometry args={[0.03, 0.08, 6]} />
+        <meshBasicMaterial color="#1A3A0A" />
+      </mesh>
+      <mesh position={[-0.45, -0.15, 0.002]}>
+        <coneGeometry args={[0.025, 0.07, 6]} />
+        <meshBasicMaterial color="#1A3A0A" />
+      </mesh>
 
       {/* Window Cross Bar - Horizontal */}
       <mesh position={[0, 0, 0.03]} castShadow={castShadow}>

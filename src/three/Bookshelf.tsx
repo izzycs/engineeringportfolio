@@ -32,7 +32,8 @@ export function Bookshelf() {
 
   return (
     <group
-      position={[-2.5, 0, -2]}
+      position={[-4.85, 0, 0]}
+      rotation={[0, Math.PI / 2, 0]}
       onClick={handleClick}
       onPointerOver={(e) => {
         e.stopPropagation();

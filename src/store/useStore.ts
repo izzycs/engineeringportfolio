@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 export type QualityLevel = 'high' | 'low';
-export type TimeOfDay = 'day' | 'golden' | 'night';
 export type CameraTarget = 'default' | 'leftMonitor' | 'rightMonitor' | 'bookshelf' | 'tv' | 'window';
 
 interface CameraPosition {
@@ -47,12 +46,6 @@ interface StoreState {
   setDeskHeight: (height: number) => void;
   toggleDeskHeight: () => void;
   
-  // Time of day
-  timeOfDay: TimeOfDay;
-  cycleSpeed: number;
-  setTimeOfDay: (time: TimeOfDay) => void;
-  setCycleSpeed: (speed: number) => void;
-  
   // Quality
   quality: QualityLevel;
   setQuality: (quality: QualityLevel) => void;
@@ -79,12 +72,6 @@ export const useStore = create<StoreState>((set) => ({
     deskHeight: state.deskHeight === 0.7 ? 1.2 : 0.7,
     isDeskTransitioning: true,
   })),
-  
-  // Time
-  timeOfDay: 'day',
-  cycleSpeed: 1, // multiplier for auto-cycle
-  setTimeOfDay: (time) => set({ timeOfDay: time }),
-  setCycleSpeed: (speed) => set({ cycleSpeed: speed }),
   
   // Quality
   quality: 'high',

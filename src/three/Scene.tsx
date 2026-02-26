@@ -11,20 +11,12 @@ import { TV } from './TV';
 import { Window } from './Window';
 import { DeskProps } from './DeskProps';
 
-const lightConfigs = {
-  day: { color: '#FFFFEE', intensity: 1.5, ambient: 0.6 },
-  golden: { color: '#FFB366', intensity: 1.2, ambient: 0.4 },
-  night: { color: '#5C7CFA', intensity: 0.4, ambient: 0.2 },
-};
-
 export function Scene() {
   const { camera } = useThree();
   const controlsRef = useRef<any>(null);
   const cameraTarget = useStore((state) => state.cameraTarget);
-  const timeOfDay = useStore((state) => state.timeOfDay);
   const quality = useStore((state) => state.quality);
   
-  const lightConfig = lightConfigs[timeOfDay];
   const useShadows = quality === 'high';
 
   // Smooth camera transitions
@@ -48,14 +40,14 @@ export function Scene() {
 
   return (
     <>
-      {/* Ambient Light */}
-      <ambientLight intensity={lightConfig.ambient} />
+      {/* Ambient Light - Fixed Daytime */}
+      <ambientLight intensity={0.6} />
 
-      {/* Directional Light (Sun/Moon) */}
+      {/* Directional Light (Sun) - Fixed Daytime */}
       <directionalLight
         position={[5, 8, 5]}
-        intensity={lightConfig.intensity}
-        color={lightConfig.color}
+        intensity={1.5}
+        color="#FFFFEE"
         castShadow={useShadows}
         shadow-mapSize-width={useShadows ? 2048 : 512}
         shadow-mapSize-height={useShadows ? 2048 : 512}
@@ -70,15 +62,13 @@ export function Scene() {
       <pointLight position={[0, 2, 0]} intensity={0.3} color="#FFFFFF" />
       <pointLight position={[-2, 1, 2]} intensity={0.2} color="#8B5CF6" />
 
-      {/* Camera Controls */}
+      {/* Camera Controls - 360 rotation enabled */}
       <OrbitControls
         ref={controlsRef}
         enableDamping
         dampingFactor={0.05}
         minDistance={2}
         maxDistance={8}
-        minPolarAngle={Math.PI / 6}
-        maxPolarAngle={Math.PI / 2}
         target={[0, 1.2, 0]}
       />
 

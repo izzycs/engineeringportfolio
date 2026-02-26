@@ -7,7 +7,6 @@ describe('Zustand Store', () => {
     useStore.setState({
       cameraTarget: 'default',
       deskHeight: 0.7,
-      timeOfDay: 'day',
       quality: 'high',
       showInstructions: true,
       selectedProject: null,
@@ -19,7 +18,6 @@ describe('Zustand Store', () => {
     const state = useStore.getState();
     expect(state.cameraTarget).toBe('default');
     expect(state.deskHeight).toBe(0.7);
-    expect(state.timeOfDay).toBe('day');
     expect(state.quality).toBe('high');
   });
 
