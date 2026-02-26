@@ -5,6 +5,7 @@ import { ProjectModal } from './components/ProjectModal';
 import { ContactForm } from './components/ContactForm';
 import { PerformanceToggle } from './components/PerformanceToggle';
 import { Instructions } from './components/Instructions';
+import { BackButton } from './components/BackButton';
 import { useStore } from './store/useStore';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
       
       <Nav />
       <Instructions />
+      <BackButton />
       <ProjectModal />
       <ContactForm />
       <PerformanceToggle />

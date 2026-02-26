@@ -10,7 +10,8 @@ function MonitorContent({ type }: { type: 'experience' | 'projects' }) {
   if (type === 'experience') {
     return (
       <div className="w-full h-full bg-gray-900 p-4 overflow-y-auto text-white font-mono text-xs">
-        <h2 className="text-lg font-bold mb-4 text-green-400">// EXPERIENCE</h2>
+        <h2 className="text-lg font-bold mb-1 text-green-400">// EXPERIENCE</h2>
+        <p className="text-green-300/60 text-xs mb-3 italic">Click monitor to expand</p>
         <div className="space-y-4">
           {experienceData.map((exp) => (
             <div key={exp.id} className="border-l-2 border-green-500 pl-3">
@@ -37,7 +38,8 @@ function MonitorContent({ type }: { type: 'experience' | 'projects' }) {
 
   return (
     <div className="w-full h-full bg-gray-900 p-4 overflow-y-auto text-white font-mono text-xs">
-      <h2 className="text-lg font-bold mb-4 text-blue-400">// PROJECTS</h2>
+      <h2 className="text-lg font-bold mb-1 text-blue-400">// PROJECTS</h2>
+      <p className="text-blue-300/60 text-xs mb-3 italic">Click monitor to expand</p>
       <div className="grid grid-cols-1 gap-3">
         {projectsData.map((project) => (
           <div
@@ -63,9 +65,14 @@ function MonitorContent({ type }: { type: 'experience' | 'projects' }) {
 
 export function Monitors() {
   const quality = useStore((state) => state.quality);
+  const setCameraTarget = useStore((state) => state.setCameraTarget);
   const castShadow = quality === 'high';
   const [leftHovered, setLeftHovered] = useState(false);
   const [rightHovered, setRightHovered] = useState(false);
+
+  const handleMonitorClick = (isLeft: boolean) => {
+    setCameraTarget(isLeft ? 'leftMonitor' : 'rightMonitor');
+  };
 
   const MonitorMesh = ({
     position,
@@ -80,9 +87,25 @@ export function Monitors() {
     onHover: () => void;
     onUnhover: () => void;
   }) => (
-    <group position={position}>
-      {/* Monitor Frame - Slightly Curved/Wider (27" monitors) */}
-      <mesh castShadow={castShadow} onPointerOver={onHover} onPointerOut={onUnhover}>
+    <group
+      position={position}
+      onClick={(e) => {
+        e.stopPropagation();
+        handleMonitorClick(isLeft);
+      }}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        document.body.style.cursor = 'pointer';
+        onHover();
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation();
+        document.body.style.cursor = 'auto';
+        onUnhover();
+      }}
+    >
+      {/* Monitor Frame */}
+      <mesh castShadow={castShadow}>
         <boxGeometry args={[0.7, 0.42, 0.03]} />
         <meshStandardMaterial color="#1A1A1A" roughness={0.3} metalness={0.8} />
       </mesh>
@@ -98,6 +121,18 @@ export function Monitors() {
           metalness={0.9}
         />
       </mesh>
+
+      {/* Label below screen */}
+      <Html
+        position={[0, -0.26, 0.02]}
+        center
+        distanceFactor={0.5}
+        style={{ pointerEvents: 'none' }}
+      >
+        <div className="text-white/70 text-xs font-mono whitespace-nowrap">
+          {isLeft ? '[ Experience ]' : '[ Projects ]'}
+        </div>
+      </Html>
 
       {/* HTML Content Overlay */}
       <Html

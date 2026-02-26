@@ -5,11 +5,13 @@
     "company": "MSRB",
     "dates": "2023 — Present",
     "bullets": [
-      "Built SQL-based data quality checks across 50+ rules",
-      "Created dashboards for monitoring rule pass/fail rates",
-      "AWS analytics pipeline for automated data profiling"
+      "Built SQL-based data quality checks across 50+ validation rules using Great Expectations",
+      "Designed and maintained ETL/ELT pipelines processing 10M+ records daily on AWS",
+      "Created real-time dashboards monitoring rule pass/fail rates with Python and Tableau",
+      "Automated data profiling and anomaly detection using AWS Glue and Lambda",
+      "Implemented data lineage tracking and metadata management across enterprise datasets"
     ],
-    "tags": ["SQL", "AWS", "Python", "Data Quality"]
+    "tags": ["SQL", "AWS", "Python", "Great Expectations", "ETL", "Tableau", "Data Governance"]
   },
   {
     "id": "datacenter",
@@ -17,10 +19,11 @@
     "company": "Night Shift Operations",
     "dates": "2021 — 2023",
     "bullets": [
-      "Hardware troubleshooting and rack management",
-      "Infrastructure monitoring and incident response",
-      "Network cabling and server provisioning"
+      "Managed server infrastructure supporting data pipelines and analytics workloads",
+      "Monitored database performance and optimized query execution on production systems",
+      "Configured networking for distributed data processing clusters",
+      "Implemented automated backup and disaster recovery procedures for critical data stores"
     ],
-    "tags": ["Infrastructure", "Networking", "Linux", "Hardware"]
+    "tags": ["Infrastructure", "Linux", "Networking", "Databases", "Monitoring"]
   }
 ]
