@@ -72,6 +72,21 @@ export function Scene() {
         target={[0, 1.2, 0]}
       />
 
+      {/* Click anywhere in room to reset view */}
+      <mesh
+        visible={false}
+        position={[0, 2.5, 0]}
+        onClick={() => {
+          const target = useStore.getState().cameraTarget;
+          if (target !== 'default') {
+            useStore.getState().setCameraTarget('default');
+          }
+        }}
+      >
+        <boxGeometry args={[12, 6, 12]} />
+        <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
+      </mesh>
+
       {/* Scene Objects */}
       <RoomShell />
       <Desk />
