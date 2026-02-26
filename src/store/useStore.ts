@@ -14,12 +14,12 @@ export const cameraPositions: Record<CameraTarget, CameraPosition> = {
     target: [0, 1.2, 0],
   },
   leftMonitor: {
-    position: [-0.6, 1.2, 1.2],
-    target: [-0.6, 1.13, -0.3],
+    position: [-0.65, 1.35, 0.8],
+    target: [-0.65, 1.25, -0.3],
   },
   rightMonitor: {
-    position: [0.6, 1.2, 1.2],
-    target: [0.6, 1.13, -0.3],
+    position: [0.65, 1.35, 0.8],
+    target: [0.65, 1.25, -0.3],
   },
   bookshelf: {
     position: [-3, 1.5, 2],
