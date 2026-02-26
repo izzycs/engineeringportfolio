@@ -4,43 +4,53 @@ import { useStore } from '../store/useStore';
 import experienceData from '../data/experience.json';
 import projectsData from '../data/projects.json';
 
-function MonitorContent({ type }: { type: 'experience' | 'projects' }) {
+function MonitorContent({ type, zoomed }: { type: 'experience' | 'projects'; zoomed: boolean }) {
   const setSelectedProject = useStore((state) => state.setSelectedProject);
+  const setCameraTarget = useStore((state) => state.setCameraTarget);
+
+  const handleZoomClick = () => {
+    setCameraTarget(type === 'experience' ? 'leftMonitor' : 'rightMonitor');
+  };
 
   if (type === 'experience') {
     return (
-      <div style={{
-        width: '100%',
-        height: '100%',
-        background: '#0f172a',
-        padding: '16px',
-        overflowY: 'auto',
-        color: 'white',
-        fontFamily: 'monospace',
-        fontSize: '14px',
-        lineHeight: '1.5',
-        boxSizing: 'border-box',
-      }}>
-        <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '12px', color: '#4ade80' }}>
+      <div
+        onClick={!zoomed ? handleZoomClick : undefined}
+        style={{
+          width: '100%',
+          height: '100%',
+          background: '#0f172a',
+          padding: '20px',
+          overflowY: zoomed ? 'auto' : 'hidden',
+          color: 'white',
+          fontFamily: 'monospace',
+          fontSize: '16px',
+          lineHeight: '1.6',
+          boxSizing: 'border-box',
+          cursor: zoomed ? 'default' : 'pointer',
+        }}
+      >
+        <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '14px', color: '#4ade80' }}>
           {'// EXPERIENCE'}
         </h2>
         {experienceData.map((exp) => (
-          <div key={exp.id} style={{ borderLeft: '3px solid #22c55e', paddingLeft: '10px', marginBottom: '14px' }}>
-            <div style={{ fontWeight: 'bold', fontSize: '15px' }}>{exp.title}</div>
-            <div style={{ color: '#9ca3af', fontSize: '13px', marginTop: '2px' }}>{exp.company} • {exp.dates}</div>
-            <ul style={{ margin: '6px 0', padding: 0, listStyle: 'none' }}>
+          <div key={exp.id} style={{ borderLeft: '3px solid #22c55e', paddingLeft: '12px', marginBottom: '18px' }}>
+            <div style={{ fontWeight: 'bold', fontSize: '18px' }}>{exp.title}</div>
+            <div style={{ color: '#9ca3af', fontSize: '15px', marginTop: '3px' }}>{exp.company} • {exp.dates}</div>
+            <ul style={{ margin: '8px 0', padding: 0, listStyle: 'none' }}>
               {exp.bullets.map((bullet, i) => (
-                <li key={i} style={{ fontSize: '12px', marginBottom: '3px' }}>→ {bullet}</li>
+                <li key={i} style={{ fontSize: '14px', marginBottom: '4px' }}>→ {bullet}</li>
               ))}
             </ul>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '8px' }}>
               {exp.tags.map((tag) => (
                 <span key={tag} style={{
                   background: '#064e3b',
                   color: '#6ee7b7',
-                  padding: '2px 7px',
-                  borderRadius: '3px',
-                  fontSize: '11px',
+                  padding: '3px 8px',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  fontWeight: 'bold',
                 }}>{tag}</span>
               ))}
             </div>
@@ -51,19 +61,23 @@ function MonitorContent({ type }: { type: 'experience' | 'projects' }) {
   }
 
   return (
-    <div style={{
-      width: '100%',
-      height: '100%',
-      background: '#0f172a',
-      padding: '16px',
-      overflowY: 'auto',
-      color: 'white',
-      fontFamily: 'monospace',
-      fontSize: '14px',
-      lineHeight: '1.5',
-      boxSizing: 'border-box',
-    }}>
-      <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '12px', color: '#60a5fa' }}>
+    <div
+      onClick={!zoomed ? handleZoomClick : undefined}
+      style={{
+        width: '100%',
+        height: '100%',
+        background: '#0f172a',
+        padding: '20px',
+        overflowY: zoomed ? 'auto' : 'hidden',
+        color: 'white',
+        fontFamily: 'monospace',
+        fontSize: '16px',
+        lineHeight: '1.6',
+        boxSizing: 'border-box',
+        cursor: zoomed ? 'default' : 'pointer',
+      }}
+    >
+      <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '14px', color: '#60a5fa' }}>
         {'// PROJECTS'}
       </h2>
       {projectsData.map((project) => (
@@ -71,24 +85,30 @@ function MonitorContent({ type }: { type: 'experience' | 'projects' }) {
           key={project.id}
           style={{
             border: '1px solid #1d4ed8',
-            padding: '10px',
-            marginBottom: '10px',
+            padding: '12px',
+            marginBottom: '12px',
             cursor: 'pointer',
           }}
-          onClick={() => setSelectedProject(project.id)}
+          onClick={(e) => {
+            if (zoomed) {
+              e.stopPropagation();
+              setSelectedProject(project.id);
+            }
+          }}
           onMouseOver={(e) => (e.currentTarget.style.borderColor = '#60a5fa')}
           onMouseOut={(e) => (e.currentTarget.style.borderColor = '#1d4ed8')}
         >
-          <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{project.title}</div>
-          <div style={{ color: '#9ca3af', fontSize: '12px', marginTop: '4px' }}>{project.description}</div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginTop: '6px' }}>
+          <div style={{ fontWeight: 'bold', fontSize: '16px' }}>{project.title}</div>
+          <div style={{ color: '#9ca3af', fontSize: '14px', marginTop: '4px' }}>{project.description}</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '8px' }}>
             {project.stack.map((tech) => (
               <span key={tech} style={{
                 background: '#1e3a5f',
                 color: '#93c5fd',
-                padding: '2px 7px',
-                borderRadius: '3px',
-                fontSize: '11px',
+                padding: '3px 8px',
+                borderRadius: '4px',
+                fontSize: '12px',
+                fontWeight: 'bold',
               }}>{tech}</span>
             ))}
           </div>
@@ -100,17 +120,21 @@ function MonitorContent({ type }: { type: 'experience' | 'projects' }) {
 
 export function Monitors() {
   const quality = useStore((state) => state.quality);
+  const cameraTarget = useStore((state) => state.cameraTarget);
   const setCameraTarget = useStore((state) => state.setCameraTarget);
   const castShadow = quality === 'high';
   const [leftHovered, setLeftHovered] = useState(false);
   const [rightHovered, setRightHovered] = useState(false);
+
+  const leftZoomed = cameraTarget === 'leftMonitor';
+  const rightZoomed = cameraTarget === 'rightMonitor';
 
   const handleMonitorClick = (isLeft: boolean, e: any) => {
     e.stopPropagation();
     setCameraTarget(isLeft ? 'leftMonitor' : 'rightMonitor');
   };
 
-  // Monitor dimensions (bigger screens)
+  // Monitor dimensions
   const frameW = 1.1;
   const frameH = 0.65;
   const screenW = 1.0;
@@ -171,14 +195,14 @@ export function Monitors() {
           position={[0, 0, 0.018]}
           distanceFactor={0.62}
           style={{
-            width: '480px',
-            height: '320px',
+            width: '500px',
+            height: '340px',
             pointerEvents: 'auto',
             overflow: 'hidden',
             borderRadius: '2px',
           }}
         >
-          <MonitorContent type="experience" />
+          <MonitorContent type="experience" zoomed={leftZoomed} />
         </Html>
       </group>
 
@@ -211,14 +235,14 @@ export function Monitors() {
           position={[0, 0, 0.018]}
           distanceFactor={0.62}
           style={{
-            width: '480px',
-            height: '320px',
+            width: '500px',
+            height: '340px',
             pointerEvents: 'auto',
             overflow: 'hidden',
             borderRadius: '2px',
           }}
         >
-          <MonitorContent type="projects" />
+          <MonitorContent type="projects" zoomed={rightZoomed} />
         </Html>
       </group>
 
