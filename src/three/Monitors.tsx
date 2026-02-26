@@ -197,7 +197,7 @@ export function Monitors() {
           style={{
             width: '500px',
             height: '340px',
-            pointerEvents: 'auto',
+            pointerEvents: leftZoomed ? 'auto' : 'none',
             overflow: 'hidden',
             borderRadius: '2px',
           }}
@@ -237,7 +237,7 @@ export function Monitors() {
           style={{
             width: '500px',
             height: '340px',
-            pointerEvents: 'auto',
+            pointerEvents: rightZoomed ? 'auto' : 'none',
             overflow: 'hidden',
             borderRadius: '2px',
           }}
