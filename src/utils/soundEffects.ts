@@ -135,8 +135,6 @@ class SoundEffectsManager {
       createDrone(130.81, 0);   // C3
       createDrone(164.81, -5);  // E3 slightly detuned
       createDrone(196.00, 5);   // G3 slightly detuned
-
-      console.log('Ambient sound started');
     } catch (error) {
       console.warn('Ambient sound failed:', error);
     }

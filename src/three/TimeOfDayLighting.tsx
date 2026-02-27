@@ -3,8 +3,15 @@ import { useThree, useFrame } from '@react-three/fiber';
 import { useStore } from '../store/useStore';
 import * as THREE from 'three';
 
+/**
+ * Time of day presets for dynamic lighting
+ */
 export type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 
+/**
+ * Complete lighting configuration for a specific time of day
+ * Includes ambient, directional, window light, fog, and object-specific lighting
+ */
 interface LightingPreset {
   ambient: { color: string; intensity: number };
   directional: { color: string; intensity: number; position: [number, number, number] };
@@ -49,6 +56,16 @@ const LIGHTING_PRESETS: Record<TimeOfDay, LightingPreset> = {
   },
 };
 
+/**
+ * Dynamic time-of-day lighting system
+ * Smoothly transitions between morning, afternoon, evening, and night lighting presets
+ * Updates ambient light, directional light, window light, desk lamp, fog, and screen glows
+ * 
+ * @example
+ * ```tsx
+ * <TimeOfDayLighting />
+ * ```
+ */
 export function TimeOfDayLighting() {
   const { scene } = useThree();
   const timeOfDay = useStore((state) => state.timeOfDay || 'afternoon');
@@ -160,7 +177,16 @@ export function TimeOfDayLighting() {
   );
 }
 
-// UI control for time of day
+/**
+ * UI control panel for changing time of day
+ * Displays emoji-based buttons for each time period
+ * Highlights current selection and provides smooth hover effects
+ * 
+ * @example
+ * ```tsx
+ * <TimeOfDayControl />
+ * ```
+ */
 export function TimeOfDayControl() {
   const setTimeOfDay = useStore((state) => state.setTimeOfDay);
   const timeOfDay = useStore((state) => state.timeOfDay || 'afternoon');

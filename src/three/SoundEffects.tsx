@@ -67,7 +67,6 @@ export function AmbientSounds() {
     
     // Would load and play ambient sound based on timeOfDay
     // Example: soundManager.play(`ambient-${timeOfDay}`);
-    console.log(`Time of day changed to: ${timeOfDay}`);
   }, [timeOfDay]);
 
   return null;

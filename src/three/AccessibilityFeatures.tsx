@@ -261,33 +261,26 @@ export function useKeyboardNavigation() {
       switch (e.key) {
         case 'ArrowLeft':
           // Rotate camera left
-          console.log('Rotate left');
           break;
         case 'ArrowRight':
           // Rotate camera right
-          console.log('Rotate right');
           break;
         case 'ArrowUp':
           // Tilt camera up
-          console.log('Tilt up');
           break;
         case 'ArrowDown':
           // Tilt camera down
-          console.log('Tilt down');
           break;
         case '+':
         case '=':
           // Zoom in
-          console.log('Zoom in');
           break;
         case '-':
           // Zoom out
-          console.log('Zoom out');
           break;
         case ' ':
           // Reset view
           e.preventDefault();
-          console.log('Reset view');
           break;
       }
     };

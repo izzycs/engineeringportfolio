@@ -34,6 +34,32 @@ An interactive, **photorealistic** 3D portfolio website featuring a fully explor
 - **Portrait/Landscape** — Adaptive camera FOV
 - **Gesture Hints** — On-screen arrows for first-time users
 
+### Personal Touches (Round 10)
+- **Desk Items** — Nameplate, water bottle, coffee mug, snacks, charging devices
+- **Wall Decorations** — Data viz prints, awards/certificates, whiteboard, 2026 calendar
+- **Collectibles** — NBA merchandise, anime figures, data engineering books, personal photos
+- **Interactive Objects** — Clickable coffee mug (steam), bouncing basketball, growing plant
+
+### Time of Day System (Round 10)
+- **Dynamic Lighting** — Morning, afternoon, evening, and night presets
+- **Smooth Transitions** — Gradual color/intensity changes between times of day
+- **Contextual Atmosphere** — Fog color, screen glow, desk lamp brightness adapt to time
+- **UI Toggle** — Easy time-of-day switcher with emoji indicators (🌅 ☀️ 🌆 🌙)
+
+### Advanced Easter Eggs (Round 10)
+- **Konami Code** — Secret activation sequence (↑↑↓↓←→←→BA)
+- **Achievement System** — 8 unlockable achievements with progress tracking
+- **Matrix Mode** — Toggle with backtick (`) key for green rain effect
+- **RGB Mode** — Ctrl+Shift+R for rainbow glow effect
+- **Developer Console** — Hold ~ key for command interface with cheat codes
+- **Portal Effects** — Click hidden spots for surprises
+
+### Error Handling & Recovery (Round 11)
+- **Error Boundary** — Graceful fallback UI for React component errors
+- **WebGL Context Loss** — Automatic detection and recovery attempts
+- **User-Friendly Messages** — Clear error explanations with reload option
+- **Performance Monitoring** — Optional FPS/memory overlay for debugging
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -107,6 +133,7 @@ Comprehensive guides for every aspect of the portfolio:
 - **[CUSTOMIZATION.md](./CUSTOMIZATION.md)** — Edit content, colors, materials, camera positions
 - **[PERFORMANCE_GUIDE.md](./PERFORMANCE_GUIDE.md)** — Optimization techniques, benchmarks, troubleshooting
 - **[KEYBOARD_SHORTCUTS.md](./KEYBOARD_SHORTCUTS.md)** — Complete keyboard and touch control reference
+- **[TESTING.md](./TESTING.md)** — Round 11 testing checklist, performance targets, known issues
 - **[CREDITS.md](./CREDITS.md)** — Inspirations, techniques, tech stack details
 - **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** — Unit tests, integration tests, visual regression
 - **[DEPLOY.md](./DEPLOY.md)** — Deployment instructions for Vercel, Netlify, Cloudflare
@@ -183,19 +210,36 @@ Output goes to `dist/` folder. The build:
 - Optimizes assets
 - Tree-shakes unused code
 - Compresses Three.js bundle
+- Code-splits easter eggs and post-processing (lazy loaded)
 
-Typical bundle size: ~400KB gzipped (varies with Three.js version).
+**Bundle sizes (Round 11 optimized):**
+- Main bundle: 400.70 KB gzipped
+- Easter Eggs: 1.04 KB gzipped (lazy loaded)
+- Advanced Easter Eggs: 2.88 KB gzipped (lazy loaded)
+- Post Processing: 0.22 KB gzipped (lazy loaded on high quality)
+
+**Total initial load: ~403 KB gzipped**
+**Total with all features: ~407 KB gzipped**
 
 ## 🐛 Troubleshooting
 
 **Issue**: Performance is slow on mobile  
-**Fix**: Click "Low" in the performance toggle (bottom right)
+**Fix**: Click "Low" in the performance toggle (bottom right). Quality should auto-adjust, but manual override is available.
 
 **Issue**: Objects not clickable  
-**Fix**: Ensure OrbitControls aren't blocking pointer events
+**Fix**: Ensure OrbitControls aren't blocking pointer events. Check z-index of UI overlays.
 
 **Issue**: Build fails with TypeScript errors  
-**Fix**: Run `npm run lint` and fix type errors
+**Fix**: Run `npm run lint` and fix type errors. Ensure all type imports use `import type { }` syntax.
+
+**Issue**: WebGL context lost error  
+**Fix**: The app will attempt to recover automatically. If it persists, reload the page. This usually happens on low-memory devices.
+
+**Issue**: Easter eggs not loading  
+**Fix**: Easter eggs are lazy-loaded. Wait 1-2 seconds after page load. Check browser console for errors.
+
+**Issue**: Frame rate drops over time  
+**Fix**: This may indicate a memory leak. Check the performance overlay (dev mode) for memory growth. Report with reproduction steps.
 
 ## 📄 License
 

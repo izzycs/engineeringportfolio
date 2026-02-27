@@ -3,7 +3,18 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useStore } from '../store/useStore';
 import * as THREE from 'three';
 
-// Enhanced coffee mug with steam animation
+/**
+ * Interactive coffee mug that emits steam particles when clicked
+ * Features realistic ceramic material and steam physics
+ * Steam particles rise and dissipate naturally over 5 seconds
+ * 
+ * @param position - 3D position [x, y, z] for the mug
+ * 
+ * @example
+ * ```tsx
+ * <InteractiveCoffeeMug position={[0.35, 0.04, 0.55]} />
+ * ```
+ */
 export function InteractiveCoffeeMug({ position }: { position: [number, number, number] }) {
   const quality = useStore((state) => state.quality);
   const castShadow = quality === 'high';
@@ -99,7 +110,18 @@ export function InteractiveCoffeeMug({ position }: { position: [number, number, 
   );
 }
 
-// Basketball that bounces around
+/**
+ * Interactive basketball with realistic physics
+ * Bounces when clicked with gravity, energy loss, and wall collisions
+ * Uses velocity-based rotation for realistic rolling effect
+ * 
+ * @param initialPosition - Starting 3D position [x, y, z]
+ * 
+ * @example
+ * ```tsx
+ * <BouncingBasketball initialPosition={[0.5, 0.76, -0.1]} />
+ * ```
+ */
 export function BouncingBasketball({ initialPosition }: { initialPosition: [number, number, number] }) {
   const quality = useStore((state) => state.quality);
   const castShadow = quality === 'high';
@@ -180,7 +202,18 @@ export function BouncingBasketball({ initialPosition }: { initialPosition: [numb
   );
 }
 
-// Clickable plant that grows when watered
+/**
+ * Interactive potted plant that grows when "watered" (clicked)
+ * Shows water droplet particles during growth animation
+ * Grows from scale 1.0 to max 1.3 over multiple clicks
+ * 
+ * @param position - 3D position [x, y, z] for the plant pot
+ * 
+ * @example
+ * ```tsx
+ * <InteractivePlant position={[0.55, 0.02, -0.35]} />
+ * ```
+ */
 export function InteractivePlant({ position }: { position: [number, number, number] }) {
   const quality = useStore((state) => state.quality);
   const castShadow = quality === 'high';

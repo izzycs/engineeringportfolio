@@ -446,7 +446,6 @@ export function DeveloperConsole() {
 // Main easter eggs component
 export function AdvancedEasterEggs() {
   useKonamiCode(() => {
-    console.log('Konami code activated!');
     if ((window as any).unlockAchievement) {
       (window as any).unlockAchievement('konami');
     }

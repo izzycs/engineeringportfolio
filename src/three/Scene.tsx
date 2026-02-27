@@ -14,12 +14,12 @@ import { DeskLamp } from './DeskLamp';
 import { WallDecor } from './WallDecor';
 import { Chair } from './Chair';
 import { CeilingFan } from './CeilingFan';
-import { EasterEggs } from './EasterEggs';
 import { GitHubCalendar } from './GitHubCalendar';
 // ROUND 9: Use photorealistic animations
 import { EnhancedChairSway, EnhancedFanRotation } from './PhotorealisticAnimations';
 import { useDeviceOptimizations } from './PerformanceOptimizations';
-import { PostProcessing } from './PostProcessing';
+// ROUND 11: Lazy load heavy components to reduce bundle size
+import { LazyEasterEggs, LazyAdvancedEasterEggs, LazyPostProcessing } from './LazyComponents';
 // ROUND 10: Personal touches and interactive elements
 import { 
   DeskNameplate, 
@@ -40,7 +40,6 @@ import {
   InteractivePlant 
 } from './InteractiveElements';
 import { TimeOfDayLighting } from './TimeOfDayLighting';
-import { AdvancedEasterEggs } from './AdvancedEasterEggs';
 
 export function Scene() {
   const { camera } = useThree();
@@ -85,7 +84,8 @@ export function Scene() {
       <TimeOfDayLighting />
       
       {/* ROUND 9: POST-PROCESSING EFFECTS (high quality only) */}
-      {deviceSettings.enablePostProcessing && <PostProcessing />}
+      {/* ROUND 11: Lazy loaded to reduce bundle size */}
+      {deviceSettings.enablePostProcessing && <LazyPostProcessing />}
 
       {/* Camera Controls - 360 rotation enabled */}
       <OrbitControls
@@ -143,7 +143,8 @@ export function Scene() {
         <CeilingFan />
       </EnhancedFanRotation>
       
-      <EasterEggs />
+      {/* ROUND 11: Lazy loaded to reduce initial bundle size */}
+      <LazyEasterEggs />
       <GitHubCalendar />
       
       {/* ROUND 10: PERSONAL TOUCHES */}
@@ -170,7 +171,8 @@ export function Scene() {
       <InteractivePlant position={[0.55, 0.02, -0.35]} />
       
       {/* ROUND 10: ADVANCED EASTER EGGS */}
-      <AdvancedEasterEggs />
+      {/* ROUND 11: Lazy loaded to reduce bundle size */}
+      <LazyAdvancedEasterEggs />
     </>
   );
 }

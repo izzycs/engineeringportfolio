@@ -334,10 +334,8 @@ export function useAutoQualityAdjust(targetFPS: number = 30) {
       
       if (currentQuality === 'high') {
         setQuality('medium');
-        console.log('Auto-adjusted quality to medium');
       } else if (currentQuality === 'medium') {
         setQuality('low');
-        console.log('Auto-adjusted quality to low');
       }
     }
   });

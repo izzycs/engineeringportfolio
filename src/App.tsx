@@ -14,6 +14,8 @@ import { useStore } from './store/useStore';
 import { TimeOfDayControl } from './three/TimeOfDayLighting';
 import { SoundControl } from './three/SoundEffects';
 import { AccessibilityPanel, SkipToContent } from './three/AccessibilityFeatures';
+// ROUND 11: Error handling and recovery
+import { ErrorBoundary, WebGLContextLossHandler } from './components/ErrorBoundary';
 
 function App() {
   const quality = useStore((state) => state.quality);
@@ -29,7 +31,13 @@ function App() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
+    // ROUND 11: Add WebGL context loss handling
+    const cleanup = WebGLContextLossHandler();
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      cleanup?.();
+    };
   }, []);
 
   // Adjust camera for mobile - farther back for full room view
@@ -37,7 +45,7 @@ function App() {
   const cameraFov = isMobile ? 75 : 60;
 
   return (
-    <>
+    <ErrorBoundary>
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
       
       <SkipToContent />
@@ -68,7 +76,7 @@ function App() {
         <SoundControl />
         <AccessibilityPanel />
       </main>
-    </>
+    </ErrorBoundary>
   );
 }
 
