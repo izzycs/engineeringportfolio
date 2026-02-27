@@ -49,6 +49,7 @@ export function Scene() {
   
   // ROUND 9: Get device-specific optimizations
   const deviceSettings = useDeviceOptimizations();
+  const isMobile = deviceSettings.isMobile;
 
   // Smooth camera transitions
   useFrame(() => {
@@ -71,11 +72,13 @@ export function Scene() {
 
   return (
     <>
-      {/* Environment Map for Realistic Reflections */}
-      <Environment 
-        preset="apartment"
-        environmentIntensity={deviceSettings.isMobile ? 0.5 : 0.8}
-      />
+      {/* Environment Map for Realistic Reflections - skip on mobile to save GPU memory */}
+      {!isMobile && (
+        <Environment 
+          preset="apartment"
+          environmentIntensity={0.8}
+        />
+      )}
       
       {/* Subtle Fog for Atmosphere (disabled on low quality) */}
       {quality !== 'low' && <fog attach="fog" args={['#E8E4DC', 8, 18]} />}
@@ -144,35 +147,34 @@ export function Scene() {
       </EnhancedFanRotation>
       
       {/* ROUND 11: Lazy loaded to reduce initial bundle size */}
-      <LazyEasterEggs />
+      {!isMobile && <LazyEasterEggs />}
       <GitHubCalendar />
       
-      {/* ROUND 10: PERSONAL TOUCHES */}
+      {/* ROUND 10: PERSONAL TOUCHES - reduced set on mobile */}
       <DeskNameplate />
-      <DataEngineeringBooks />
-      <PersonalPhotos />
-      <NBAMerchandise />
-      <AnimeCollectibles />
+      {!isMobile && <DataEngineeringBooks />}
+      {!isMobile && <PersonalPhotos />}
+      {!isMobile && <NBAMerchandise />}
+      {!isMobile && <AnimeCollectibles />}
       <WaterBottle />
-      <DeskSnacks />
-      <ChargingDevices />
-      <PostItNotes />
-      <PoweredLaptop />
+      {!isMobile && <DeskSnacks />}
+      {!isMobile && <ChargingDevices />}
+      {!isMobile && <PostItNotes />}
+      {!isMobile && <PoweredLaptop />}
       
-      {/* ROUND 10: WALL DECORATIONS */}
-      <DataVizPrints />
-      <AwardsCertificates />
-      <Whiteboard />
-      <Calendar2026 />
+      {/* ROUND 10: WALL DECORATIONS - reduced on mobile */}
+      {!isMobile && <DataVizPrints />}
+      {!isMobile && <AwardsCertificates />}
+      {!isMobile && <Whiteboard />}
+      {!isMobile && <Calendar2026 />}
       
-      {/* ROUND 10: INTERACTIVE ELEMENTS */}
-      <InteractiveCoffeeMug position={[0.35, 0.04, 0.55]} />
-      <BouncingBasketball initialPosition={[0.5, 0.76, -0.1]} />
-      <InteractivePlant position={[0.55, 0.02, -0.35]} />
+      {/* ROUND 10: INTERACTIVE ELEMENTS - skip on mobile */}
+      {!isMobile && <InteractiveCoffeeMug position={[0.35, 0.04, 0.55]} />}
+      {!isMobile && <BouncingBasketball initialPosition={[0.5, 0.76, -0.1]} />}
+      {!isMobile && <InteractivePlant position={[0.55, 0.02, -0.35]} />}
       
-      {/* ROUND 10: ADVANCED EASTER EGGS */}
-      {/* ROUND 11: Lazy loaded to reduce bundle size */}
-      <LazyAdvancedEasterEggs />
+      {/* ROUND 10: ADVANCED EASTER EGGS - desktop only */}
+      {!isMobile && <LazyAdvancedEasterEggs />}
     </>
   );
 }

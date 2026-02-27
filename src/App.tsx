@@ -51,13 +51,14 @@ function App() {
       <SkipToContent />
       
       <Canvas
-        shadows={quality === 'high'}
+        shadows={!isMobile && quality === 'high'}
         camera={{ position: cameraPosition, fov: cameraFov }}
         gl={{ 
-          antialias: quality === 'high',
-          powerPreference: isMobile ? 'low-power' : 'high-performance'
+          antialias: !isMobile && quality === 'high',
+          powerPreference: isMobile ? 'low-power' : 'high-performance',
+          failIfMajorPerformanceCaveat: false,
         }}
-        dpr={Math.min(window.devicePixelRatio, 2)}
+        dpr={isMobile ? 1 : Math.min(window.devicePixelRatio, 2)}
       >
         <Scene />
       </Canvas>
