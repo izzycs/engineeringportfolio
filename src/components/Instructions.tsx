@@ -21,13 +21,13 @@ export function Instructions() {
       <div className="bg-black/70 backdrop-blur-sm border border-white/30 rounded-lg p-6 max-w-md mx-4 text-white animate-fade-in pointer-events-auto">
         <h2 className="text-2xl font-bold mb-3">Welcome! 👋</h2>
         <p className="text-gray-300 mb-4">
-          Explore Izzy's data engineering workspace. Click on objects to zoom in — drag to look around 360°.
+          Step into Izzy's data engineering workspace. A blend of analytics, anime, and NBA passion. Click on objects to zoom in — drag to look around 360°.
         </p>
         <ul className="space-y-2 text-sm">
           <li>🖥️ <strong>Left Monitor</strong> — Experience & career history</li>
           <li>🖥️ <strong>Right Monitor</strong> — Data engineering projects</li>
-          <li>📚 <strong>Bookshelf</strong> — Interests & favorites</li>
-          <li>📺 <strong>TV</strong> — About me</li>
+          <li>📚 <strong>Bookshelf</strong> — Anime collection, NBA basketball & figurines</li>
+          <li>📺 <strong>TV</strong> — Live S&P 500 market data</li>
           <li>🪟 <strong>Window</strong> — DC skyline view</li>
           <li>⬅️ <strong>Back Button</strong> — Return to full room view</li>
         </ul>

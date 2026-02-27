@@ -1,12 +1,12 @@
 import { useStore } from '../store/useStore';
 
 const bookTitles = [
-  { title: 'Pirate Saga', color: '#E63946' },
-  { title: 'Hunter Guild', color: '#2A9D8F' },
-  { title: 'Soul Reaper', color: '#264653' },
-  { title: 'Ninja Chronicle', color: '#F4A261' },
-  { title: 'Titan Attack', color: '#E76F51' },
-  { title: 'Demon Blade', color: '#8338EC' },
+  { title: 'One Piece', color: '#E63946' },
+  { title: 'Hunter x Hunter', color: '#2A9D8F' },
+  { title: 'Bleach', color: '#264653' },
+  { title: 'Naruto', color: '#F4A261' },
+  { title: 'Attack on Titan', color: '#E76F51' },
+  { title: 'Demon Slayer', color: '#8338EC' },
 ];
 
 function Book({ position, height, color }: { position: [number, number, number]; height: number; color: string }) {
@@ -94,6 +94,35 @@ export function Bookshelf() {
       <Book position={[-0.12, 1.62, 0.05]} height={0.25} color={bookTitles[1].color} />
       <Book position={[-0.06, 1.6, 0.05]} height={0.21} color={bookTitles[2].color} />
       <Book position={[0, 1.64, 0.05]} height={0.27} color={bookTitles[3].color} />
+
+      {/* NBA Basketball - on middle shelf */}
+      <mesh position={[0.15, 1.2, 0.05]} castShadow={castShadow}>
+        <sphereGeometry args={[0.06, 16, 16]} />
+        <meshStandardMaterial color="#FF6B35" roughness={0.5} metalness={0.1} />
+      </mesh>
+
+      {/* Anime Figurine - on top shelf (simple humanoid shape) */}
+      <group position={[0.25, 1.68, 0.05]}>
+        {/* Head */}
+        <mesh position={[0, 0.08, 0]} castShadow={castShadow}>
+          <sphereGeometry args={[0.025, 8, 8]} />
+          <meshStandardMaterial color="#FFD1BA" roughness={0.7} />
+        </mesh>
+        {/* Body */}
+        <mesh position={[0, 0.04, 0]} castShadow={castShadow}>
+          <boxGeometry args={[0.035, 0.06, 0.02]} />
+          <meshStandardMaterial color="#2196F3" roughness={0.7} />
+        </mesh>
+        {/* Legs */}
+        <mesh position={[-0.01, -0.01, 0]} castShadow={castShadow}>
+          <boxGeometry args={[0.012, 0.04, 0.015]} />
+          <meshStandardMaterial color="#1565C0" roughness={0.7} />
+        </mesh>
+        <mesh position={[0.01, -0.01, 0]} castShadow={castShadow}>
+          <boxGeometry args={[0.012, 0.04, 0.015]} />
+          <meshStandardMaterial color="#1565C0" roughness={0.7} />
+        </mesh>
+      </group>
 
       {/* Invisible clickable area for better UX */}
       <mesh position={[0, 1, 0]} visible={false}>

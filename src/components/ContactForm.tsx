@@ -87,7 +87,7 @@ export function ContactForm() {
             <a href="https://github.com/izzycs" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">
               GitHub
             </a>
-            <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
+            <a href="https://www.linkedin.com/in/izzycs" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">
               LinkedIn
             </a>
             <a href="mailto:TODO-REPLACE-WITH-ACTUAL-EMAIL@example.com" className="text-blue-400 hover:text-blue-300 transition-colors">
