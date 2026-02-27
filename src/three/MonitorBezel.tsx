@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { enhancedPlasticMatte, enhancedMetalBrushedAluminum } from './proceduralMaterials';
 
 /**
