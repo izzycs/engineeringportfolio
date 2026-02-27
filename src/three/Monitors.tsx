@@ -1,35 +1,134 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { Html } from '@react-three/drei';
 import { useStore } from '../store/useStore';
+import * as THREE from 'three';
 import experienceData from '../data/experience.json';
 import projectsData from '../data/projects.json';
 
-function MonitorContent({ type, zoomed }: { type: 'experience' | 'projects'; zoomed: boolean }) {
-  const setSelectedProject = useStore((state) => state.setSelectedProject);
-  const setCameraTarget = useStore((state) => state.setCameraTarget);
+/** Renders text content onto a CanvasTexture so it lives ON the monitor mesh */
+function useScreenTexture(type: 'experience' | 'projects') {
+  const texture = useMemo(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 340;
+    const ctx = canvas.getContext('2d')!;
 
-  const handleZoomClick = () => {
-    setCameraTarget(type === 'experience' ? 'leftMonitor' : 'rightMonitor');
-  };
+    // Background
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, 512, 340);
+
+    if (type === 'experience') {
+      // Title
+      ctx.fillStyle = '#4ade80';
+      ctx.font = 'bold 20px monospace';
+      ctx.fillText('// EXPERIENCE', 16, 32);
+
+      let y = 58;
+      experienceData.forEach((exp) => {
+        // Green left border
+        ctx.fillStyle = '#22c55e';
+        ctx.fillRect(16, y, 3, 70);
+
+        // Job title
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px monospace';
+        ctx.fillText(exp.title, 28, y + 14);
+
+        // Company
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '12px monospace';
+        ctx.fillText(`${exp.company} • ${exp.dates}`, 28, y + 30);
+
+        // Bullets (first 2)
+        ctx.fillStyle = '#e2e8f0';
+        ctx.font = '11px monospace';
+        exp.bullets.slice(0, 2).forEach((bullet, i) => {
+          const text = `→ ${bullet}`;
+          ctx.fillText(text.length > 58 ? text.substring(0, 55) + '...' : text, 28, y + 46 + i * 14);
+        });
+
+        // Tags
+        let tagX = 28;
+        const tagY = y + 78;
+        ctx.font = 'bold 9px monospace';
+        exp.tags.slice(0, 5).forEach((tag) => {
+          const w = ctx.measureText(tag).width + 10;
+          ctx.fillStyle = '#064e3b';
+          ctx.fillRect(tagX, tagY - 9, w, 14);
+          ctx.fillStyle = '#6ee7b7';
+          ctx.fillText(tag, tagX + 5, tagY);
+          tagX += w + 4;
+        });
+
+        y += 100;
+      });
+    } else {
+      // Title
+      ctx.fillStyle = '#60a5fa';
+      ctx.font = 'bold 20px monospace';
+      ctx.fillText('// PROJECTS', 16, 32);
+
+      let y = 52;
+      projectsData.forEach((project) => {
+        // Border box
+        ctx.strokeStyle = '#1d4ed8';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(16, y, 480, 65);
+
+        // Project title
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px monospace';
+        ctx.fillText(project.title, 24, y + 18);
+
+        // Description
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '11px monospace';
+        const desc = project.description;
+        ctx.fillText(desc.length > 62 ? desc.substring(0, 59) + '...' : desc, 24, y + 34);
+
+        // Tags
+        let tagX = 24;
+        const tagY = y + 52;
+        ctx.font = 'bold 9px monospace';
+        project.stack.slice(0, 5).forEach((tech) => {
+          const w = ctx.measureText(tech).width + 10;
+          ctx.fillStyle = '#1e3a5f';
+          ctx.fillRect(tagX, tagY - 9, w, 14);
+          ctx.fillStyle = '#93c5fd';
+          ctx.fillText(tech, tagX + 5, tagY);
+          tagX += w + 4;
+        });
+
+        y += 75;
+      });
+    }
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.needsUpdate = true;
+    return tex;
+  }, [type]);
+
+  return texture;
+}
+
+/** Interactive HTML content shown only when zoomed in */
+function MonitorContent({ type }: { type: 'experience' | 'projects' }) {
+  const setSelectedProject = useStore((state) => state.setSelectedProject);
 
   if (type === 'experience') {
     return (
-      <div
-        onClick={!zoomed ? handleZoomClick : undefined}
-        style={{
-          width: '100%',
-          height: '100%',
-          background: '#0f172a',
-          padding: '20px',
-          overflowY: zoomed ? 'auto' : 'hidden',
-          color: 'white',
-          fontFamily: 'monospace',
-          fontSize: '16px',
-          lineHeight: '1.6',
-          boxSizing: 'border-box',
-          cursor: zoomed ? 'default' : 'pointer',
-        }}
-      >
+      <div style={{
+        width: '100%',
+        height: '100%',
+        background: '#0f172a',
+        padding: '20px',
+        overflowY: 'auto',
+        color: 'white',
+        fontFamily: 'monospace',
+        fontSize: '16px',
+        lineHeight: '1.6',
+        boxSizing: 'border-box',
+      }}>
         <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '14px', color: '#4ade80' }}>
           {'// EXPERIENCE'}
         </h2>
@@ -61,22 +160,18 @@ function MonitorContent({ type, zoomed }: { type: 'experience' | 'projects'; zoo
   }
 
   return (
-    <div
-      onClick={!zoomed ? handleZoomClick : undefined}
-      style={{
-        width: '100%',
-        height: '100%',
-        background: '#0f172a',
-        padding: '20px',
-        overflowY: zoomed ? 'auto' : 'hidden',
-        color: 'white',
-        fontFamily: 'monospace',
-        fontSize: '16px',
-        lineHeight: '1.6',
-        boxSizing: 'border-box',
-        cursor: zoomed ? 'default' : 'pointer',
-      }}
-    >
+    <div style={{
+      width: '100%',
+      height: '100%',
+      background: '#0f172a',
+      padding: '20px',
+      overflowY: 'auto',
+      color: 'white',
+      fontFamily: 'monospace',
+      fontSize: '16px',
+      lineHeight: '1.6',
+      boxSizing: 'border-box',
+    }}>
       <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '14px', color: '#60a5fa' }}>
         {'// PROJECTS'}
       </h2>
@@ -90,10 +185,8 @@ function MonitorContent({ type, zoomed }: { type: 'experience' | 'projects'; zoo
             cursor: 'pointer',
           }}
           onClick={(e) => {
-            if (zoomed) {
-              e.stopPropagation();
-              setSelectedProject(project.id);
-            }
+            e.stopPropagation();
+            setSelectedProject(project.id);
           }}
           onMouseOver={(e) => (e.currentTarget.style.borderColor = '#60a5fa')}
           onMouseOut={(e) => (e.currentTarget.style.borderColor = '#1d4ed8')}
@@ -123,18 +216,17 @@ export function Monitors() {
   const cameraTarget = useStore((state) => state.cameraTarget);
   const setCameraTarget = useStore((state) => state.setCameraTarget);
   const castShadow = quality === 'high';
-  const [leftHovered, setLeftHovered] = useState(false);
-  const [rightHovered, setRightHovered] = useState(false);
-
   const leftZoomed = cameraTarget === 'leftMonitor';
   const rightZoomed = cameraTarget === 'rightMonitor';
+
+  const experienceTexture = useScreenTexture('experience');
+  const projectsTexture = useScreenTexture('projects');
 
   const handleMonitorClick = (isLeft: boolean, e: any) => {
     e.stopPropagation();
     setCameraTarget(isLeft ? 'leftMonitor' : 'rightMonitor');
   };
 
-  // Monitor dimensions
   const frameW = 1.1;
   const frameH = 0.65;
   const screenW = 1.0;
@@ -170,8 +262,8 @@ export function Monitors() {
       <group
         position={[-0.65, 0.05, 0]}
         onClick={(e) => handleMonitorClick(true, e)}
-        onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; setLeftHovered(true); }}
-        onPointerOut={(e) => { e.stopPropagation(); document.body.style.cursor = 'auto'; setLeftHovered(false); }}
+        onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
+        onPointerOut={(e) => { e.stopPropagation(); document.body.style.cursor = 'auto'; }}
       >
         {/* Frame */}
         <mesh castShadow={castShadow}>
@@ -179,39 +271,37 @@ export function Monitors() {
           <meshStandardMaterial color="#1A1A1A" roughness={0.3} metalness={0.8} />
         </mesh>
 
-        {/* Screen backlight */}
-        <mesh position={[0, 0, 0.016]}>
+        {/* Screen with canvas texture (always visible, flush on monitor) */}
+        <mesh position={[0, 0, 0.0151]}>
           <planeGeometry args={[screenW, screenH]} />
-          <meshStandardMaterial
-            color={leftHovered ? '#1a3a2a' : '#0f172a'}
-            emissive={leftHovered ? '#22c55e' : '#0f172a'}
-            emissiveIntensity={leftHovered ? 0.15 : 0.05}
-          />
+          <meshBasicMaterial map={experienceTexture} />
         </mesh>
 
-        {/* HTML Content */}
-        <Html
-          transform
-          position={[0, 0, 0.018]}
-          distanceFactor={0.62}
-          style={{
-            width: '500px',
-            height: '340px',
-            pointerEvents: leftZoomed ? 'auto' : 'none',
-            overflow: 'hidden',
-            borderRadius: '2px',
-          }}
-        >
-          <MonitorContent type="experience" zoomed={leftZoomed} />
-        </Html>
+        {/* Interactive HTML overlay - only when zoomed in */}
+        {leftZoomed && (
+          <Html
+            transform
+            position={[0, 0, 0.016]}
+            distanceFactor={0.62}
+            style={{
+              width: '500px',
+              height: '340px',
+              pointerEvents: 'auto',
+              overflow: 'hidden',
+              borderRadius: '2px',
+            }}
+          >
+            <MonitorContent type="experience" />
+          </Html>
+        )}
       </group>
 
       {/* ===== RIGHT MONITOR - PROJECTS ===== */}
       <group
         position={[0.65, 0.05, 0]}
         onClick={(e) => handleMonitorClick(false, e)}
-        onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; setRightHovered(true); }}
-        onPointerOut={(e) => { e.stopPropagation(); document.body.style.cursor = 'auto'; setRightHovered(false); }}
+        onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
+        onPointerOut={(e) => { e.stopPropagation(); document.body.style.cursor = 'auto'; }}
       >
         {/* Frame */}
         <mesh castShadow={castShadow}>
@@ -219,31 +309,29 @@ export function Monitors() {
           <meshStandardMaterial color="#1A1A1A" roughness={0.3} metalness={0.8} />
         </mesh>
 
-        {/* Screen backlight */}
-        <mesh position={[0, 0, 0.016]}>
+        {/* Screen with canvas texture (always visible, flush on monitor) */}
+        <mesh position={[0, 0, 0.0151]}>
           <planeGeometry args={[screenW, screenH]} />
-          <meshStandardMaterial
-            color={rightHovered ? '#1a2a3a' : '#0f172a'}
-            emissive={rightHovered ? '#3b82f6' : '#0f172a'}
-            emissiveIntensity={rightHovered ? 0.15 : 0.05}
-          />
+          <meshBasicMaterial map={projectsTexture} />
         </mesh>
 
-        {/* HTML Content */}
-        <Html
-          transform
-          position={[0, 0, 0.018]}
-          distanceFactor={0.62}
-          style={{
-            width: '500px',
-            height: '340px',
-            pointerEvents: rightZoomed ? 'auto' : 'none',
-            overflow: 'hidden',
-            borderRadius: '2px',
-          }}
-        >
-          <MonitorContent type="projects" zoomed={rightZoomed} />
-        </Html>
+        {/* Interactive HTML overlay - only when zoomed in */}
+        {rightZoomed && (
+          <Html
+            transform
+            position={[0, 0, 0.016]}
+            distanceFactor={0.62}
+            style={{
+              width: '500px',
+              height: '340px',
+              pointerEvents: 'auto',
+              overflow: 'hidden',
+              borderRadius: '2px',
+            }}
+          >
+            <MonitorContent type="projects" />
+          </Html>
+        )}
       </group>
 
       {/* LED Strip Behind Monitors */}
