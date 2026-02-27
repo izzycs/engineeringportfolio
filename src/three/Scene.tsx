@@ -8,7 +8,7 @@ import { Desk } from './Desk';
 import { Monitors } from './Monitors';
 import { Bookshelf } from './Bookshelf';
 import { TV } from './TV';
-import { Window } from './Window';
+import { EnhancedWindow } from './EnhancedWindow';
 import { DeskProps } from './DeskProps';
 import { DeskLamp } from './DeskLamp';
 import { WallDecor } from './WallDecor';
@@ -17,6 +17,7 @@ import { CeilingFan } from './CeilingFan';
 import { EasterEggs } from './EasterEggs';
 import { GitHubCalendar } from './GitHubCalendar';
 import { EnhancedLighting } from './EnhancedLighting';
+import { ChairSway, FanRotation } from './SubtleAnimations';
 
 export function Scene() {
   const { camera } = useThree();
@@ -85,15 +86,19 @@ export function Scene() {
       {/* Scene Objects */}
       <RoomShell />
       <Desk />
-      <Chair />
+      <ChairSway position={[0.8, 0, -0.3]}>
+        <Chair />
+      </ChairSway>
       <Monitors />
       <DeskProps />
       <DeskLamp />
       <Bookshelf />
       <TV />
-      <Window />
+      <EnhancedWindow />
       <WallDecor />
-      <CeilingFan />
+      <FanRotation position={[0, 2.7, 0]} speed={0.5}>
+        <CeilingFan />
+      </FanRotation>
       <EasterEggs />
       <GitHubCalendar />
     </>
