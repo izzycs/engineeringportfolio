@@ -4,7 +4,8 @@ import { useStore } from '../store/useStore';
 import * as THREE from 'three';
 import experienceData from '../data/experience.json';
 import projectsData from '../data/projects.json';
-import { metalChrome, metalBrushedAluminum, metalMatteBlack, screenGlass } from './materials';
+import { createRealisticMetal, createRealisticPlastic, createRealisticScreen } from './proceduralMaterials';
+import { MonitorWobble } from './SubtleAnimations';
 
 /** Renders text content onto a CanvasTexture so it lives ON the monitor mesh */
 function useScreenTexture(type: 'experience' | 'projects') {
@@ -222,6 +223,12 @@ export function Monitors() {
 
   const experienceTexture = useScreenTexture('experience');
   const projectsTexture = useScreenTexture('projects');
+  
+  // Enhanced materials
+  const glossyPlasticMat = createRealisticPlastic('#2A2A2A', true);
+  const brushedAluminumMat = createRealisticMetal('#A8A8A8', 0.3, 0.4);
+  const chromeMat = createRealisticMetal('#C0C0C0', 0.15, 0.2);
+  const screenGlassMat = createRealisticScreen('#0A0A0A');
 
   const handleMonitorClick = (isLeft: boolean, e: any) => {
     e.stopPropagation();
@@ -238,13 +245,13 @@ export function Monitors() {
       {/* Dual Monitor Arm - Center Post */}
       <mesh position={[0, -0.45, -0.1]} castShadow={castShadow}>
         <cylinderGeometry args={[0.025, 0.025, 0.9, 16]} />
-        <meshStandardMaterial {...metalBrushedAluminum} />
+        <primitive object={brushedAluminumMat.clone()} attach="material" />
       </mesh>
 
       {/* Monitor Arm Base - Weighted */}
       <mesh position={[0, -0.905, -0.1]} castShadow={castShadow}>
         <cylinderGeometry args={[0.12, 0.12, 0.02, 24]} />
-        <meshStandardMaterial {...metalChrome} />
+        <primitive object={chromeMat.clone()} attach="material" />
       </mesh>
       
       {/* Base Rubber Grip */}
@@ -256,7 +263,7 @@ export function Monitors() {
       {/* Left Arm Extension */}
       <mesh position={[-0.45, 0.05, -0.1]} castShadow={castShadow}>
         <boxGeometry args={[0.9, 0.025, 0.025]} />
-        <meshStandardMaterial {...metalBrushedAluminum} />
+        <primitive object={brushedAluminumMat.clone()} attach="material" />
       </mesh>
 
       {/* Left Arm Cable Clips */}
@@ -272,13 +279,13 @@ export function Monitors() {
       {/* Left Arm Joint Detail */}
       <mesh position={[-0.9, 0.05, -0.1]} castShadow={castShadow}>
         <sphereGeometry args={[0.025, 16, 16]} />
-        <meshStandardMaterial {...metalChrome} />
+        <primitive object={chromeMat.clone()} attach="material" />
       </mesh>
 
       {/* Right Arm Extension */}
       <mesh position={[0.45, 0.05, -0.1]} castShadow={castShadow}>
         <boxGeometry args={[0.9, 0.025, 0.025]} />
-        <meshStandardMaterial {...metalBrushedAluminum} />
+        <primitive object={brushedAluminumMat.clone()} attach="material" />
       </mesh>
 
       {/* Right Arm Cable Clips */}
@@ -294,18 +301,19 @@ export function Monitors() {
       {/* Right Arm Joint Detail */}
       <mesh position={[0.9, 0.05, -0.1]} castShadow={castShadow}>
         <sphereGeometry args={[0.025, 16, 16]} />
-        <meshStandardMaterial {...metalChrome} />
+        <primitive object={chromeMat.clone()} attach="material" />
       </mesh>
 
       {/* Center Joint Detail (where arms meet post) */}
       <mesh position={[0, 0.05, -0.1]} castShadow={castShadow}>
         <boxGeometry args={[0.06, 0.04, 0.04]} />
-        <meshStandardMaterial {...metalChrome} />
+        <primitive object={chromeMat.clone()} attach="material" />
       </mesh>
 
       {/* ===== LEFT MONITOR - EXPERIENCE ===== */}
+      <MonitorWobble position={[-0.65, 0.05, 0]} wobbleAmount={0.0008}>
       <group
-        position={[-0.65, 0.05, 0]}
+        position={[0, 0, 0]}
         onClick={(e) => handleMonitorClick(true, e)}
         onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
         onPointerOut={(e) => { e.stopPropagation(); document.body.style.cursor = 'auto'; }}
@@ -313,7 +321,7 @@ export function Monitors() {
         {/* Frame Back */}
         <mesh position={[0, 0, -0.015]} castShadow={castShadow}>
           <boxGeometry args={[frameW, frameH, 0.03]} />
-          <meshStandardMaterial {...metalMatteBlack} />
+          <primitive object={glossyPlasticMat.clone()} attach="material" />
         </mesh>
         
         {/* Bezel Top */}
@@ -343,7 +351,7 @@ export function Monitors() {
         {/* Screen Glass Layer */}
         <mesh position={[0, 0, 0.0165]}>
           <planeGeometry args={[screenW, screenH]} />
-          <meshStandardMaterial {...screenGlass} />
+          <primitive object={screenGlassMat.clone()} attach="material" />
         </mesh>
 
         {/* Screen with canvas texture (always visible, on top of glass) */}
@@ -370,10 +378,12 @@ export function Monitors() {
           </Html>
         )}
       </group>
+      </MonitorWobble>
 
       {/* ===== RIGHT MONITOR - PROJECTS ===== */}
+      <MonitorWobble position={[0.65, 0.05, 0]} wobbleAmount={0.0008}>
       <group
-        position={[0.65, 0.05, 0]}
+        position={[0, 0, 0]}
         onClick={(e) => handleMonitorClick(false, e)}
         onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
         onPointerOut={(e) => { e.stopPropagation(); document.body.style.cursor = 'auto'; }}
@@ -381,7 +391,7 @@ export function Monitors() {
         {/* Frame Back */}
         <mesh position={[0, 0, -0.015]} castShadow={castShadow}>
           <boxGeometry args={[frameW, frameH, 0.03]} />
-          <meshStandardMaterial {...metalMatteBlack} />
+          <primitive object={glossyPlasticMat.clone()} attach="material" />
         </mesh>
         
         {/* Bezel Top */}
@@ -411,7 +421,7 @@ export function Monitors() {
         {/* Screen Glass Layer */}
         <mesh position={[0, 0, 0.0165]}>
           <planeGeometry args={[screenW, screenH]} />
-          <meshStandardMaterial {...screenGlass} />
+          <primitive object={screenGlassMat.clone()} attach="material" />
         </mesh>
 
         {/* Screen with canvas texture (always visible, on top of glass) */}
@@ -438,6 +448,7 @@ export function Monitors() {
           </Html>
         )}
       </group>
+      </MonitorWobble>
 
       {/* LED Strip Behind Monitors */}
       <mesh position={[0, 0.35, -0.05]} castShadow={castShadow}>

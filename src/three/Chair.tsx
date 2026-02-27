@@ -1,18 +1,25 @@
-import { fabricMesh, fabricSeat, plasticABS, metalChrome, rubberWheel } from './materials';
+import { createRealisticFabric, createRealisticMetal, createRealisticPlastic } from './proceduralMaterials';
 
 export function Chair() {
+  // Enhanced materials
+  const fabricMeshMat = createRealisticFabric('#2C2C2C', 0.95);
+  const fabricSeatMat = createRealisticFabric('#1A1A1A', 0.9);
+  const mattePlasticMat = createRealisticPlastic('#2A2A2A', false);
+  const chromeMat = createRealisticMetal('#C0C0C0', 0.15, 0.2);
+  const rubberMat = createRealisticPlastic('#0A0A0A', false);
+  
   return (
-    <group position={[0, 0, 1.2]}>
+    <group position={[0, 0, 0]}>
       {/* Gas lift / center pole - Chrome Finish */}
       <mesh position={[0, 0.3, 0]}>
         <cylinderGeometry args={[0.03, 0.03, 0.6, 20]} />
-        <meshStandardMaterial {...metalChrome} />
+        <primitive object={chromeMat.clone()} attach="material" />
       </mesh>
       
       {/* Gas lift cover - Plastic */}
       <mesh position={[0, 0.6, 0]}>
         <cylinderGeometry args={[0.05, 0.035, 0.04, 16]} />
-        <meshStandardMaterial {...plasticABS} />
+        <primitive object={mattePlasticMat.clone()} attach="material" />
       </mesh>
 
       {/* Base star (5-pointed) - Reinforced Plastic */}
@@ -40,12 +47,12 @@ export function Chair() {
             {/* Rubber wheel */}
             <mesh rotation={[Math.PI / 2, 0, 0]}>
               <cylinderGeometry args={[0.035, 0.035, 0.04, 16]} />
-              <meshStandardMaterial {...rubberWheel} />
+              <primitive object={rubberMat.clone()} attach="material" />
             </mesh>
             {/* Plastic core */}
             <mesh rotation={[Math.PI / 2, 0, 0]}>
               <cylinderGeometry args={[0.015, 0.015, 0.041, 8]} />
-              <meshStandardMaterial color="#3A3A3A" roughness={0.6} metalness={0.2} />
+              <primitive object={mattePlasticMat.clone()} attach="material" />
             </mesh>
           </group>
         );
@@ -54,7 +61,7 @@ export function Chair() {
       {/* Seat - Fabric Material */}
       <mesh position={[0, 0.65, 0]}>
         <cylinderGeometry args={[0.25, 0.22, 0.08, 32]} />
-        <meshStandardMaterial {...fabricSeat} />
+        <primitive object={fabricSeatMat.clone()} attach="material" />
       </mesh>
 
       {/* Seat cushion detail - Stitching Effect */}
@@ -66,29 +73,29 @@ export function Chair() {
       {/* Seat Base/Pan - Plastic */}
       <mesh position={[0, 0.61, 0]}>
         <cylinderGeometry args={[0.22, 0.2, 0.02, 24]} />
-        <meshStandardMaterial {...plasticABS} />
+        <primitive object={mattePlasticMat.clone()} attach="material" />
       </mesh>
 
       {/* Backrest support posts - Chrome */}
       <mesh position={[-0.15, 0.85, -0.15]} rotation={[0.2, 0, 0]}>
         <cylinderGeometry args={[0.02, 0.02, 0.4, 16]} />
-        <meshStandardMaterial {...metalChrome} />
+        <primitive object={chromeMat.clone()} attach="material" />
       </mesh>
       <mesh position={[0.15, 0.85, -0.15]} rotation={[0.2, 0, 0]}>
         <cylinderGeometry args={[0.02, 0.02, 0.4, 16]} />
-        <meshStandardMaterial {...metalChrome} />
+        <primitive object={chromeMat.clone()} attach="material" />
       </mesh>
 
       {/* Backrest Frame - Plastic */}
       <mesh position={[0, 1.0, -0.25]} rotation={[0.2, 0, 0]}>
         <boxGeometry args={[0.35, 0.45, 0.08]} />
-        <meshStandardMaterial {...plasticABS} />
+        <primitive object={mattePlasticMat.clone()} attach="material" />
       </mesh>
 
       {/* Backrest Mesh/Fabric */}
       <mesh position={[0, 1.0, -0.21]} rotation={[0.2, 0, 0]}>
         <boxGeometry args={[0.3, 0.4, 0.02]} />
-        <meshStandardMaterial {...fabricMesh} />
+        <primitive object={fabricMeshMat.clone()} attach="material" />
       </mesh>
 
       {/* Lumbar support - Extra Padding */}
@@ -102,7 +109,7 @@ export function Chair() {
         {/* Left armrest top - Plastic */}
         <mesh position={[-0.25, 0.75, 0]} rotation={[0, 0, 0]}>
           <boxGeometry args={[0.06, 0.04, 0.25]} />
-          <meshStandardMaterial {...plasticABS} />
+          <primitive object={mattePlasticMat.clone()} attach="material" />
         </mesh>
         {/* Left armrest padding */}
         <mesh position={[-0.25, 0.77, 0]} rotation={[0, 0, 0]}>
@@ -112,13 +119,13 @@ export function Chair() {
         {/* Left armrest post - Chrome */}
         <mesh position={[-0.25, 0.65, 0]}>
           <cylinderGeometry args={[0.02, 0.02, 0.15, 16]} />
-          <meshStandardMaterial {...metalChrome} />
+          <primitive object={chromeMat.clone()} attach="material" />
         </mesh>
 
         {/* Right armrest top - Plastic */}
         <mesh position={[0.25, 0.75, 0]} rotation={[0, 0, 0]}>
           <boxGeometry args={[0.06, 0.04, 0.25]} />
-          <meshStandardMaterial {...plasticABS} />
+          <primitive object={mattePlasticMat.clone()} attach="material" />
         </mesh>
         {/* Right armrest padding */}
         <mesh position={[0.25, 0.77, 0]} rotation={[0, 0, 0]}>
@@ -128,7 +135,7 @@ export function Chair() {
         {/* Right armrest post - Chrome */}
         <mesh position={[0.25, 0.65, 0]}>
           <cylinderGeometry args={[0.02, 0.02, 0.15, 16]} />
-          <meshStandardMaterial {...metalChrome} />
+          <primitive object={chromeMat.clone()} attach="material" />
         </mesh>
       </group>
     </group>

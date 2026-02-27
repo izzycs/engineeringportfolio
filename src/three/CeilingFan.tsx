@@ -1,19 +1,6 @@
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
-
 export function CeilingFan() {
-  const bladesRef = useRef<THREE.Group>(null);
-  
-  // Slow rotation animation
-  useFrame((_state, delta) => {
-    if (bladesRef.current) {
-      bladesRef.current.rotation.y += delta * 0.8; // Slow speed
-    }
-  });
-
   return (
-    <group position={[0, 2.85, 0]}>
+    <group position={[0, 0, 0]}>
       {/* Ceiling mount */}
       <mesh position={[0, 0.05, 0]}>
         <cylinderGeometry args={[0.08, 0.1, 0.1, 16]} />
@@ -27,7 +14,7 @@ export function CeilingFan() {
       </mesh>
 
       {/* Blades group (rotating) */}
-      <group ref={bladesRef} position={[0, -0.15, 0]}>
+      <group position={[0, -0.15, 0]}>
         {/* 4 blades */}
         {[0, 1, 2, 3].map((i) => {
           const angle = (i * Math.PI) / 2;
