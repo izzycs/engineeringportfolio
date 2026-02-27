@@ -252,10 +252,48 @@ export function Monitors() {
         <meshStandardMaterial color="#8A8A8A" roughness={0.3} metalness={0.8} />
       </mesh>
 
+      {/* Left Arm Cable Clips */}
+      <mesh position={[-0.3, 0.05, -0.09]} castShadow={castShadow}>
+        <cylinderGeometry args={[0.008, 0.008, 0.015, 8]} />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.4} metalness={0.7} />
+      </mesh>
+      <mesh position={[-0.6, 0.05, -0.09]} castShadow={castShadow}>
+        <cylinderGeometry args={[0.008, 0.008, 0.015, 8]} />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.4} metalness={0.7} />
+      </mesh>
+
+      {/* Left Arm Joint Detail */}
+      <mesh position={[-0.9, 0.05, -0.1]} castShadow={castShadow}>
+        <sphereGeometry args={[0.02, 12, 12]} />
+        <meshStandardMaterial color="#6A6A6A" roughness={0.3} metalness={0.8} />
+      </mesh>
+
       {/* Right Arm Extension */}
       <mesh position={[0.45, 0.05, -0.1]} castShadow={castShadow}>
         <boxGeometry args={[0.9, 0.025, 0.025]} />
         <meshStandardMaterial color="#8A8A8A" roughness={0.3} metalness={0.8} />
+      </mesh>
+
+      {/* Right Arm Cable Clips */}
+      <mesh position={[0.3, 0.05, -0.09]} castShadow={castShadow}>
+        <cylinderGeometry args={[0.008, 0.008, 0.015, 8]} />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.4} metalness={0.7} />
+      </mesh>
+      <mesh position={[0.6, 0.05, -0.09]} castShadow={castShadow}>
+        <cylinderGeometry args={[0.008, 0.008, 0.015, 8]} />
+        <meshStandardMaterial color="#4A4A4A" roughness={0.4} metalness={0.7} />
+      </mesh>
+
+      {/* Right Arm Joint Detail */}
+      <mesh position={[0.9, 0.05, -0.1]} castShadow={castShadow}>
+        <sphereGeometry args={[0.02, 12, 12]} />
+        <meshStandardMaterial color="#6A6A6A" roughness={0.3} metalness={0.8} />
+      </mesh>
+
+      {/* Center Joint Detail (where arms meet post) */}
+      <mesh position={[0, 0.05, -0.1]} castShadow={castShadow}>
+        <boxGeometry args={[0.06, 0.04, 0.04]} />
+        <meshStandardMaterial color="#6A6A6A" roughness={0.3} metalness={0.8} />
       </mesh>
 
       {/* ===== LEFT MONITOR - EXPERIENCE ===== */}

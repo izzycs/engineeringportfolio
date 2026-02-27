@@ -6,14 +6,21 @@ export function RoomShell() {
 
   return (
     <group>
-      {/* Floor */}
+      {/* Floor - Enhanced wood texture */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, 0, 0]}
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[10, 10]} />
-        <meshStandardMaterial color="#8B7355" roughness={0.9} metalness={0.1} />
+        <meshStandardMaterial 
+          color="#7A6247"
+          roughness={0.85}
+          metalness={0.05}
+          roughnessMap={undefined}
+          normalScale={[0.5, 0.5]}
+          envMapIntensity={0.3}
+        />
       </mesh>
 
       {/* Back Wall */}

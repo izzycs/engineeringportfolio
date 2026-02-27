@@ -106,6 +106,46 @@ export function DeskProps() {
           <meshStandardMaterial color="#43A047" roughness={0.6} metalness={0.0} />
         </mesh>
       </group>
+
+      {/* Headphone Stand - Back-left area near monitor arm */}
+      <group position={[-0.45, 0.02, -0.25]}>
+        {/* Base - circular metal base */}
+        <mesh castShadow={castShadow}>
+          <cylinderGeometry args={[0.06, 0.06, 0.01, 16]} />
+          <meshStandardMaterial color="#2A2A2A" roughness={0.3} metalness={0.9} />
+        </mesh>
+
+        {/* Post - cylindrical stand */}
+        <mesh position={[0, 0.1, 0]} castShadow={castShadow}>
+          <cylinderGeometry args={[0.012, 0.012, 0.2, 12]} />
+          <meshStandardMaterial color="#1A1A1A" roughness={0.3} metalness={0.9} />
+        </mesh>
+
+        {/* Hook - curved top using torus segment */}
+        <mesh position={[0, 0.2, 0]} rotation={[0, 0, Math.PI / 2]} castShadow={castShadow}>
+          <torusGeometry args={[0.03, 0.01, 8, 16, Math.PI]} />
+          <meshStandardMaterial color="#1A1A1A" roughness={0.3} metalness={0.9} />
+        </mesh>
+
+        {/* Headphones hanging on stand */}
+        {/* Headband */}
+        <mesh position={[0, 0.18, 0]} rotation={[0, 0, Math.PI / 2]} castShadow={castShadow}>
+          <torusGeometry args={[0.045, 0.008, 8, 16, Math.PI]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.4} metalness={0.7} />
+        </mesh>
+
+        {/* Left ear cup */}
+        <mesh position={[-0.04, 0.14, 0]} castShadow={castShadow}>
+          <cylinderGeometry args={[0.025, 0.025, 0.015, 16]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.4} metalness={0.7} />
+        </mesh>
+
+        {/* Right ear cup */}
+        <mesh position={[0.04, 0.14, 0]} castShadow={castShadow}>
+          <cylinderGeometry args={[0.025, 0.025, 0.015, 16]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.4} metalness={0.7} />
+        </mesh>
+      </group>
     </group>
   );
 }

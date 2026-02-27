@@ -11,6 +11,7 @@ import { TV } from './TV';
 import { Window } from './Window';
 import { DeskProps } from './DeskProps';
 import { DeskLamp } from './DeskLamp';
+import { WallDecor } from './WallDecor';
 
 export function Scene() {
   const { camera } = useThree();
@@ -41,6 +42,9 @@ export function Scene() {
 
   return (
     <>
+      {/* Subtle Fog for Atmosphere */}
+      <fog attach="fog" args={['#E8E4DC', 8, 18]} />
+
       {/* Ambient Light - Fixed Daytime */}
       <ambientLight intensity={0.6} />
 
@@ -62,6 +66,10 @@ export function Scene() {
       {/* Point lights for accent */}
       <pointLight position={[0, 2, 0]} intensity={0.3} color="#FFFFFF" />
       <pointLight position={[-2, 1, 2]} intensity={0.2} color="#8B5CF6" />
+      
+      {/* Additional Accent Light - Purple/Blue Ambiance */}
+      <pointLight position={[3, 1.5, -3]} intensity={0.25} color="#6366F1" />
+      <pointLight position={[-3, 1.2, 1]} intensity={0.2} color="#A78BFA" />
 
       {/* Camera Controls - 360 rotation enabled */}
       <OrbitControls
@@ -97,6 +105,7 @@ export function Scene() {
       <Bookshelf />
       <TV />
       <Window />
+      <WallDecor />
     </>
   );
 }
