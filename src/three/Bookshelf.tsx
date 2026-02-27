@@ -1,4 +1,5 @@
 import { useStore } from '../store/useStore';
+import { woodWalnut, basketball } from './materials';
 
 const bookTitles = [
   { title: 'One Piece', color: '#E63946' },
@@ -14,10 +15,27 @@ function Book({ position, height, color }: { position: [number, number, number];
   const castShadow = quality === 'high';
 
   return (
-    <mesh position={position} castShadow={castShadow}>
-      <boxGeometry args={[0.04, height, 0.15]} />
-      <meshStandardMaterial color={color} roughness={0.7} metalness={0.1} />
-    </mesh>
+    <group position={position}>
+      {/* Book Spine */}
+      <mesh castShadow={castShadow}>
+        <boxGeometry args={[0.04, height, 0.15]} />
+        <meshStandardMaterial 
+          color={color} 
+          roughness={0.8} 
+          metalness={0.0}
+          envMapIntensity={0.2}
+        />
+      </mesh>
+      {/* Book Pages - Side View */}
+      <mesh position={[-0.021, 0, 0]} castShadow={castShadow}>
+        <boxGeometry args={[0.002, height * 0.95, 0.14]} />
+        <meshStandardMaterial 
+          color="#F5F5DC" 
+          roughness={0.9} 
+          metalness={0.0}
+        />
+      </mesh>
+    </group>
   );
 }
 
@@ -44,33 +62,41 @@ export function Bookshelf() {
         document.body.style.cursor = 'auto';
       }}
     >
-      {/* Bookshelf Frame - Vertical Sides */}
+      {/* Bookshelf Frame - Vertical Sides with Wood Grain */}
       <mesh position={[-0.4, 1, 0]} castShadow={castShadow}>
         <boxGeometry args={[0.05, 2, 0.3]} />
-        <meshStandardMaterial color="#654321" roughness={0.8} metalness={0.1} />
+        <meshStandardMaterial {...woodWalnut} />
       </mesh>
       <mesh position={[0.4, 1, 0]} castShadow={castShadow}>
         <boxGeometry args={[0.05, 2, 0.3]} />
-        <meshStandardMaterial color="#654321" roughness={0.8} metalness={0.1} />
+        <meshStandardMaterial {...woodWalnut} />
+      </mesh>
+      
+      {/* Back Panel */}
+      <mesh position={[0, 1, -0.14]} castShadow={castShadow}>
+        <boxGeometry args={[0.8, 2, 0.01]} />
+        <meshStandardMaterial color="#4A3D2F" roughness={0.8} metalness={0.0} />
       </mesh>
 
-      {/* Shelves */}
-      <mesh position={[0, 0.5, 0]} castShadow={castShadow}>
-        <boxGeometry args={[0.8, 0.03, 0.3]} />
-        <meshStandardMaterial color="#654321" roughness={0.8} metalness={0.1} />
-      </mesh>
-      <mesh position={[0, 1, 0]} castShadow={castShadow}>
-        <boxGeometry args={[0.8, 0.03, 0.3]} />
-        <meshStandardMaterial color="#654321" roughness={0.8} metalness={0.1} />
-      </mesh>
-      <mesh position={[0, 1.5, 0]} castShadow={castShadow}>
-        <boxGeometry args={[0.8, 0.03, 0.3]} />
-        <meshStandardMaterial color="#654321" roughness={0.8} metalness={0.1} />
-      </mesh>
-      <mesh position={[0, 2, 0]} castShadow={castShadow}>
-        <boxGeometry args={[0.8, 0.03, 0.3]} />
-        <meshStandardMaterial color="#654321" roughness={0.8} metalness={0.1} />
-      </mesh>
+      {/* Shelves with Wood Grain and Subtle Wear */}
+      {[0.5, 1, 1.5, 2].map((y, i) => (
+        <group key={`shelf-${i}`}>
+          {/* Main Shelf */}
+          <mesh position={[0, y, 0]} castShadow={castShadow}>
+            <boxGeometry args={[0.8, 0.03, 0.3]} />
+            <meshStandardMaterial {...woodWalnut} />
+          </mesh>
+          {/* Shelf Dust/Wear Layer */}
+          <mesh position={[0, y + 0.016, 0]} castShadow={false}>
+            <planeGeometry args={[0.78, 0.28]} />
+            <meshBasicMaterial 
+              color="#9A8A7A"
+              transparent
+              opacity={0.08}
+            />
+          </mesh>
+        </group>
+      ))}
 
       {/* Books - Bottom Shelf */}
       <Book position={[-0.3, 0.6, 0.05]} height={0.18} color={bookTitles[0].color} />
@@ -97,8 +123,19 @@ export function Bookshelf() {
 
       {/* NBA Basketball - on middle shelf */}
       <mesh position={[0.15, 1.2, 0.05]} castShadow={castShadow}>
-        <sphereGeometry args={[0.06, 16, 16]} />
-        <meshStandardMaterial color="#FF6B35" roughness={0.5} metalness={0.1} />
+        <sphereGeometry args={[0.06, 20, 20]} />
+        <meshStandardMaterial {...basketball} />
+      </mesh>
+      
+      {/* Basketball Black Lines - Simplified */}
+      <mesh position={[0.15, 1.2, 0.05]} castShadow={false}>
+        <sphereGeometry args={[0.061, 20, 20]} />
+        <meshBasicMaterial 
+          color="#000000"
+          transparent
+          opacity={0.15}
+          wireframe
+        />
       </mesh>
 
       {/* Anime Figurine - on top shelf (simple humanoid shape) */}

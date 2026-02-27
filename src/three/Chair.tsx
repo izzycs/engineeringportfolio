@@ -1,13 +1,21 @@
+import { fabricMesh, fabricSeat, plasticABS, metalChrome, rubberWheel } from './materials';
+
 export function Chair() {
   return (
     <group position={[0, 0, 1.2]}>
-      {/* Gas lift / center pole */}
+      {/* Gas lift / center pole - Chrome Finish */}
       <mesh position={[0, 0.3, 0]}>
-        <cylinderGeometry args={[0.03, 0.03, 0.6, 16]} />
-        <meshStandardMaterial color="#2a2a2a" metalness={0.8} roughness={0.2} />
+        <cylinderGeometry args={[0.03, 0.03, 0.6, 20]} />
+        <meshStandardMaterial {...metalChrome} />
+      </mesh>
+      
+      {/* Gas lift cover - Plastic */}
+      <mesh position={[0, 0.6, 0]}>
+        <cylinderGeometry args={[0.05, 0.035, 0.04, 16]} />
+        <meshStandardMaterial {...plasticABS} />
       </mesh>
 
-      {/* Base star (5-pointed) */}
+      {/* Base star (5-pointed) - Reinforced Plastic */}
       <group position={[0, 0.05, 0]}>
         {[0, 1, 2, 3, 4].map((i) => {
           const angle = (i * Math.PI * 2) / 5;
@@ -16,85 +24,111 @@ export function Chair() {
           return (
             <mesh key={i} position={[x, 0, z]} rotation={[0, angle, 0]}>
               <boxGeometry args={[0.08, 0.04, 0.3]} />
-              <meshStandardMaterial color="#1a1a1a" metalness={0.6} roughness={0.3} />
+              <meshStandardMaterial color="#1A1A1A" roughness={0.5} metalness={0.1} />
             </mesh>
           );
         })}
       </group>
 
-      {/* Wheels */}
+      {/* Wheels - Rubber with Plastic Core */}
       {[0, 1, 2, 3, 4].map((i) => {
         const angle = (i * Math.PI * 2) / 5;
         const x = Math.cos(angle) * 0.25;
         const z = Math.sin(angle) * 0.25;
         return (
-          <mesh key={`wheel-${i}`} position={[x, 0.02, z]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.035, 0.035, 0.04, 16]} />
-            <meshStandardMaterial color="#3a3a3a" roughness={0.6} />
-          </mesh>
+          <group key={`wheel-${i}`} position={[x, 0.02, z]}>
+            {/* Rubber wheel */}
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.035, 0.035, 0.04, 16]} />
+              <meshStandardMaterial {...rubberWheel} />
+            </mesh>
+            {/* Plastic core */}
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.015, 0.015, 0.041, 8]} />
+              <meshStandardMaterial color="#3A3A3A" roughness={0.6} metalness={0.2} />
+            </mesh>
+          </group>
         );
       })}
 
-      {/* Seat */}
+      {/* Seat - Fabric Material */}
       <mesh position={[0, 0.65, 0]}>
         <cylinderGeometry args={[0.25, 0.22, 0.08, 32]} />
-        <meshStandardMaterial color="#2a2a2a" roughness={0.8} />
+        <meshStandardMaterial {...fabricSeat} />
       </mesh>
 
-      {/* Seat cushion detail */}
+      {/* Seat cushion detail - Stitching Effect */}
       <mesh position={[0, 0.69, 0]}>
         <cylinderGeometry args={[0.24, 0.21, 0.02, 32]} />
-        <meshStandardMaterial color="#1a1a1a" roughness={0.9} />
+        <meshStandardMaterial color="#0A0A0A" roughness={0.95} metalness={0.0} />
+      </mesh>
+      
+      {/* Seat Base/Pan - Plastic */}
+      <mesh position={[0, 0.61, 0]}>
+        <cylinderGeometry args={[0.22, 0.2, 0.02, 24]} />
+        <meshStandardMaterial {...plasticABS} />
       </mesh>
 
-      {/* Backrest support posts */}
+      {/* Backrest support posts - Chrome */}
       <mesh position={[-0.15, 0.85, -0.15]} rotation={[0.2, 0, 0]}>
         <cylinderGeometry args={[0.02, 0.02, 0.4, 16]} />
-        <meshStandardMaterial color="#2a2a2a" metalness={0.7} roughness={0.3} />
+        <meshStandardMaterial {...metalChrome} />
       </mesh>
       <mesh position={[0.15, 0.85, -0.15]} rotation={[0.2, 0, 0]}>
         <cylinderGeometry args={[0.02, 0.02, 0.4, 16]} />
-        <meshStandardMaterial color="#2a2a2a" metalness={0.7} roughness={0.3} />
+        <meshStandardMaterial {...metalChrome} />
       </mesh>
 
-      {/* Backrest */}
+      {/* Backrest Frame - Plastic */}
       <mesh position={[0, 1.0, -0.25]} rotation={[0.2, 0, 0]}>
         <boxGeometry args={[0.35, 0.45, 0.08]} />
-        <meshStandardMaterial color="#2a2a2a" roughness={0.8} />
+        <meshStandardMaterial {...plasticABS} />
       </mesh>
 
-      {/* Backrest padding detail */}
+      {/* Backrest Mesh/Fabric */}
       <mesh position={[0, 1.0, -0.21]} rotation={[0.2, 0, 0]}>
         <boxGeometry args={[0.3, 0.4, 0.02]} />
-        <meshStandardMaterial color="#1a1a1a" roughness={0.9} />
+        <meshStandardMaterial {...fabricMesh} />
       </mesh>
 
-      {/* Lumbar support */}
+      {/* Lumbar support - Extra Padding */}
       <mesh position={[0, 0.95, -0.21]} rotation={[0.2, 0, 0]}>
         <boxGeometry args={[0.25, 0.15, 0.05]} />
-        <meshStandardMaterial color="#3a3a3a" roughness={0.7} />
+        <meshStandardMaterial color="#2A2A2A" roughness={0.85} metalness={0.0} />
       </mesh>
 
-      {/* Armrests */}
+      {/* Armrests - Plastic with Padding */}
       <group>
-        {/* Left armrest */}
+        {/* Left armrest top - Plastic */}
         <mesh position={[-0.25, 0.75, 0]} rotation={[0, 0, 0]}>
           <boxGeometry args={[0.06, 0.04, 0.25]} />
-          <meshStandardMaterial color="#1a1a1a" metalness={0.6} roughness={0.4} />
+          <meshStandardMaterial {...plasticABS} />
         </mesh>
+        {/* Left armrest padding */}
+        <mesh position={[-0.25, 0.77, 0]} rotation={[0, 0, 0]}>
+          <boxGeometry args={[0.055, 0.01, 0.24]} />
+          <meshStandardMaterial color="#2A2A2A" roughness={0.85} metalness={0.0} />
+        </mesh>
+        {/* Left armrest post - Chrome */}
         <mesh position={[-0.25, 0.65, 0]}>
           <cylinderGeometry args={[0.02, 0.02, 0.15, 16]} />
-          <meshStandardMaterial color="#2a2a2a" metalness={0.8} roughness={0.2} />
+          <meshStandardMaterial {...metalChrome} />
         </mesh>
 
-        {/* Right armrest */}
+        {/* Right armrest top - Plastic */}
         <mesh position={[0.25, 0.75, 0]} rotation={[0, 0, 0]}>
           <boxGeometry args={[0.06, 0.04, 0.25]} />
-          <meshStandardMaterial color="#1a1a1a" metalness={0.6} roughness={0.4} />
+          <meshStandardMaterial {...plasticABS} />
         </mesh>
+        {/* Right armrest padding */}
+        <mesh position={[0.25, 0.77, 0]} rotation={[0, 0, 0]}>
+          <boxGeometry args={[0.055, 0.01, 0.24]} />
+          <meshStandardMaterial color="#2A2A2A" roughness={0.85} metalness={0.0} />
+        </mesh>
+        {/* Right armrest post - Chrome */}
         <mesh position={[0.25, 0.65, 0]}>
           <cylinderGeometry args={[0.02, 0.02, 0.15, 16]} />
-          <meshStandardMaterial color="#2a2a2a" metalness={0.8} roughness={0.2} />
+          <meshStandardMaterial {...metalChrome} />
         </mesh>
       </group>
     </group>

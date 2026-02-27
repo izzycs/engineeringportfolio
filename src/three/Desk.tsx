@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useStore } from '../store/useStore';
 import * as THREE from 'three';
+import { metalBrushedAluminum, metalMatteBlack } from './materials';
 
 export function Desk() {
   const groupRef = useRef<THREE.Group>(null);
@@ -34,85 +35,116 @@ export function Desk() {
 
   return (
     <group ref={groupRef} position={[0, deskHeight, 0]}>
-      {/* Desk Surface - Rustic Brown Wood */}
+      {/* Desk Surface - Realistic Wood with Grain Variation */}
       <mesh position={[0, 0, 0]} castShadow={castShadow} receiveShadow={receiveShadow}>
         <boxGeometry args={[2.6, 0.05, 1.2]} />
         <meshStandardMaterial
           color="#5C4033"
-          roughness={0.75}
-          metalness={0.05}
+          roughness={0.65}
+          metalness={0.0}
+          envMapIntensity={0.4}
+        />
+      </mesh>
+      
+      {/* Desk Edge Wear/Banding - Front */}
+      <mesh position={[0, -0.005, 0.6]} castShadow={castShadow}>
+        <boxGeometry args={[2.6, 0.04, 0.01]} />
+        <meshStandardMaterial
+          color="#3D3226"
+          roughness={0.7}
+          metalness={0.0}
+        />
+      </mesh>
+      
+      {/* Desk Edge Wear/Banding - Back */}
+      <mesh position={[0, -0.005, -0.6]} castShadow={castShadow}>
+        <boxGeometry args={[2.6, 0.04, 0.01]} />
+        <meshStandardMaterial
+          color="#3D3226"
+          roughness={0.7}
+          metalness={0.0}
+        />
+      </mesh>
+      
+      {/* Desk Edge Wear/Banding - Left */}
+      <mesh position={[-1.3, -0.005, 0]} castShadow={castShadow}>
+        <boxGeometry args={[0.01, 0.04, 1.2]} />
+        <meshStandardMaterial
+          color="#3D3226"
+          roughness={0.7}
+          metalness={0.0}
+        />
+      </mesh>
+      
+      {/* Desk Edge Wear/Banding - Right */}
+      <mesh position={[1.3, -0.005, 0]} castShadow={castShadow}>
+        <boxGeometry args={[0.01, 0.04, 1.2]} />
+        <meshStandardMaterial
+          color="#3D3226"
+          roughness={0.7}
+          metalness={0.0}
         />
       </mesh>
 
-      {/* Legs - Rectangular Black Metal Tubes */}
+      {/* Legs - Rectangular Black Metal Tubes with Realistic Finish */}
       {/* Front Left */}
       <mesh position={[-1.2, -0.35, 0.5]} castShadow={castShadow}>
         <boxGeometry args={[0.05, 0.7, 0.05]} />
-        <meshStandardMaterial
-          color="#1A1A1A"
-          roughness={0.3}
-          metalness={0.9}
-        />
+        <meshStandardMaterial {...metalMatteBlack} />
       </mesh>
 
       {/* Front Right */}
       <mesh position={[1.2, -0.35, 0.5]} castShadow={castShadow}>
         <boxGeometry args={[0.05, 0.7, 0.05]} />
-        <meshStandardMaterial
-          color="#1A1A1A"
-          roughness={0.3}
-          metalness={0.9}
-        />
+        <meshStandardMaterial {...metalMatteBlack} />
       </mesh>
 
       {/* Back Left */}
       <mesh position={[-1.2, -0.35, -0.5]} castShadow={castShadow}>
         <boxGeometry args={[0.05, 0.7, 0.05]} />
-        <meshStandardMaterial
-          color="#1A1A1A"
-          roughness={0.3}
-          metalness={0.9}
-        />
+        <meshStandardMaterial {...metalMatteBlack} />
       </mesh>
 
       {/* Back Right */}
       <mesh position={[1.2, -0.35, -0.5]} castShadow={castShadow}>
         <boxGeometry args={[0.05, 0.7, 0.05]} />
-        <meshStandardMaterial
-          color="#1A1A1A"
-          roughness={0.3}
-          metalness={0.9}
-        />
+        <meshStandardMaterial {...metalMatteBlack} />
       </mesh>
+      
+      {/* Leg Feet - Adjustable Leveling Feet */}
+      {[[-1.2, 0.5], [1.2, 0.5], [-1.2, -0.5], [1.2, -0.5]].map(([x, z], i) => (
+        <mesh key={i} position={[x, -0.72, z]} castShadow={castShadow}>
+          <cylinderGeometry args={[0.035, 0.025, 0.04, 16]} />
+          <meshStandardMaterial color="#2A2A2A" roughness={0.8} metalness={0.2} />
+        </mesh>
+      ))}
 
       {/* Crossbar connecting leg pairs - Front */}
       <mesh position={[0, -0.35, 0.5]} castShadow={castShadow}>
         <boxGeometry args={[2.5, 0.04, 0.04]} />
-        <meshStandardMaterial
-          color="#1A1A1A"
-          roughness={0.3}
-          metalness={0.9}
-        />
+        <meshStandardMaterial {...metalMatteBlack} />
       </mesh>
 
       {/* Crossbar connecting leg pairs - Back */}
       <mesh position={[0, -0.35, -0.5]} castShadow={castShadow}>
         <boxGeometry args={[2.5, 0.04, 0.04]} />
-        <meshStandardMaterial
-          color="#1A1A1A"
-          roughness={0.3}
-          metalness={0.9}
-        />
+        <meshStandardMaterial {...metalMatteBlack} />
       </mesh>
 
-      {/* Motor Housing */}
+      {/* Motor Housing - Brushed Metal */}
       <mesh position={[0, -0.5, 0]} castShadow={castShadow}>
         <boxGeometry args={[0.35, 0.15, 0.9]} />
-        <meshStandardMaterial
-          color="#2A2A2A"
-          roughness={0.4}
-          metalness={0.7}
-        />
+        <meshStandardMaterial {...metalBrushedAluminum} />
+      </mesh>
+      
+      {/* Motor Vents */}
+      <mesh position={[-0.15, -0.5, 0]} castShadow={castShadow}>
+        <boxGeometry args={[0.02, 0.12, 0.6]} />
+        <meshStandardMaterial color="#0A0A0A" roughness={0.9} metalness={0.1} />
+      </mesh>
+      <mesh position={[0.15, -0.5, 0]} castShadow={castShadow}>
+        <boxGeometry args={[0.02, 0.12, 0.6]} />
+        <meshStandardMaterial color="#0A0A0A" roughness={0.9} metalness={0.1} />
       </mesh>
 
       {/* Cable Tray */}

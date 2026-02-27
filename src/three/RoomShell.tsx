@@ -1,4 +1,5 @@
 import { useStore } from '../store/useStore';
+import { paintMatte, paintSemiGloss } from './materials';
 
 export function RoomShell() {
   const quality = useStore((state) => state.quality);
@@ -6,7 +7,7 @@ export function RoomShell() {
 
   return (
     <group>
-      {/* Floor - Enhanced wood texture */}
+      {/* Floor - Realistic Wood with Grain Variation */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, 0, 0]}
@@ -14,59 +15,127 @@ export function RoomShell() {
       >
         <planeGeometry args={[10, 10]} />
         <meshStandardMaterial 
-          color="#7A6247"
-          roughness={0.85}
-          metalness={0.05}
-          roughnessMap={undefined}
-          normalScale={[0.5, 0.5]}
-          envMapIntensity={0.3}
+          color="#8B7355"
+          roughness={0.7}
+          metalness={0.0}
+          envMapIntensity={0.4}
         />
       </mesh>
+      
+      {/* Floor Planks - Subtle Dividers for Realism */}
+      {[-4, -2, 0, 2, 4].map((z, i) => (
+        <mesh
+          key={`plank-${i}`}
+          rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, 0.001, z]}
+          receiveShadow={receiveShadow}
+        >
+          <planeGeometry args={[10, 0.02]} />
+          <meshStandardMaterial 
+            color="#6D5A47"
+            roughness={0.8}
+            metalness={0.0}
+          />
+        </mesh>
+      ))}
 
-      {/* Back Wall */}
+      {/* Back Wall with Subtle Texture */}
       <mesh position={[0, 2.5, -5]} receiveShadow={receiveShadow}>
         <planeGeometry args={[10, 5]} />
-        <meshStandardMaterial color="#E8E4DC" roughness={0.95} metalness={0} />
+        <meshStandardMaterial {...paintMatte} color="#E8E4DC" />
+      </mesh>
+      
+      {/* Back Wall Baseboard */}
+      <mesh position={[0, 0.05, -4.95]}>
+        <boxGeometry args={[10, 0.1, 0.05]} />
+        <meshStandardMaterial {...paintSemiGloss} color="#F0EDE5" />
       </mesh>
 
-      {/* Left Wall */}
+      {/* Left Wall with Subtle Texture */}
       <mesh
         position={[-5, 2.5, 0]}
         rotation={[0, Math.PI / 2, 0]}
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[10, 5]} />
-        <meshStandardMaterial color="#E8E4DC" roughness={0.95} metalness={0} />
+        <meshStandardMaterial {...paintMatte} color="#E8E4DC" />
+      </mesh>
+      
+      {/* Left Wall Baseboard */}
+      <mesh position={[-4.95, 0.05, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <boxGeometry args={[10, 0.1, 0.05]} />
+        <meshStandardMaterial {...paintSemiGloss} color="#F0EDE5" />
       </mesh>
 
-      {/* Right Wall */}
+      {/* Right Wall with Subtle Texture */}
       <mesh
         position={[5, 2.5, 0]}
         rotation={[0, -Math.PI / 2, 0]}
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[10, 5]} />
-        <meshStandardMaterial color="#E8E4DC" roughness={0.95} metalness={0} />
+        <meshStandardMaterial {...paintMatte} color="#E8E4DC" />
+      </mesh>
+      
+      {/* Right Wall Baseboard */}
+      <mesh position={[4.95, 0.05, 0]} rotation={[0, -Math.PI / 2, 0]}>
+        <boxGeometry args={[10, 0.1, 0.05]} />
+        <meshStandardMaterial {...paintSemiGloss} color="#F0EDE5" />
       </mesh>
 
-      {/* Ceiling */}
+      {/* Ceiling with Texture */}
       <mesh
         rotation={[Math.PI / 2, 0, 0]}
         position={[0, 5, 0]}
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[10, 10]} />
-        <meshStandardMaterial color="#F5F5F5" roughness={0.9} metalness={0} />
+        <meshStandardMaterial 
+          color="#F5F5F5" 
+          roughness={0.85} 
+          metalness={0.0}
+          envMapIntensity={0.2}
+        />
+      </mesh>
+      
+      {/* Crown Molding - Back Wall */}
+      <mesh position={[0, 4.95, -4.95]}>
+        <boxGeometry args={[10, 0.05, 0.05]} />
+        <meshStandardMaterial {...paintSemiGloss} color="#FFFFFF" />
+      </mesh>
+      
+      {/* Crown Molding - Left Wall */}
+      <mesh position={[-4.95, 4.95, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <boxGeometry args={[10, 0.05, 0.05]} />
+        <meshStandardMaterial {...paintSemiGloss} color="#FFFFFF" />
+      </mesh>
+      
+      {/* Crown Molding - Right Wall */}
+      <mesh position={[4.95, 4.95, 0]} rotation={[0, -Math.PI / 2, 0]}>
+        <boxGeometry args={[10, 0.05, 0.05]} />
+        <meshStandardMaterial {...paintSemiGloss} color="#FFFFFF" />
       </mesh>
 
-      {/* Front Wall (behind camera) */}
+      {/* Front Wall (behind camera) with Texture */}
       <mesh
         position={[0, 2.5, 5]}
         rotation={[0, Math.PI, 0]}
         receiveShadow={receiveShadow}
       >
         <planeGeometry args={[10, 5]} />
-        <meshStandardMaterial color="#E8E4DC" roughness={0.95} metalness={0} />
+        <meshStandardMaterial {...paintMatte} color="#E8E4DC" />
+      </mesh>
+      
+      {/* Front Wall Baseboard */}
+      <mesh position={[0, 0.05, 4.95]} rotation={[0, Math.PI, 0]}>
+        <boxGeometry args={[10, 0.1, 0.05]} />
+        <meshStandardMaterial {...paintSemiGloss} color="#F0EDE5" />
+      </mesh>
+      
+      {/* Crown Molding - Front Wall */}
+      <mesh position={[0, 4.95, 4.95]} rotation={[0, Math.PI, 0]}>
+        <boxGeometry args={[10, 0.05, 0.05]} />
+        <meshStandardMaterial {...paintSemiGloss} color="#FFFFFF" />
       </mesh>
 
       {/* Door on Front Wall */}

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Environment } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useStore, cameraPositions } from '../store/useStore';
 import * as THREE from 'three';
@@ -46,16 +46,27 @@ export function Scene() {
 
   return (
     <>
+      {/* Environment Map for Realistic Reflections */}
+      <Environment preset="apartment" />
+      
       {/* Subtle Fog for Atmosphere */}
       <fog attach="fog" args={['#E8E4DC', 8, 18]} />
 
-      {/* Ambient Light - Fixed Daytime */}
-      <ambientLight intensity={0.6} />
+      {/* Ambient Light - Enhanced for Realism */}
+      <ambientLight intensity={0.5} />
+      
+      {/* Hemisphere Light - Natural Skylight */}
+      <hemisphereLight 
+        color="#FFFFEE" 
+        groundColor="#8B7355" 
+        intensity={0.3} 
+        position={[0, 5, 0]}
+      />
 
-      {/* Directional Light (Sun) - Fixed Daytime */}
+      {/* Directional Light (Sun) - Enhanced with Better Shadows */}
       <directionalLight
         position={[5, 8, 5]}
-        intensity={1.5}
+        intensity={1.2}
         color="#FFFFEE"
         castShadow={useShadows}
         shadow-mapSize-width={useShadows ? 2048 : 512}
@@ -65,15 +76,16 @@ export function Scene() {
         shadow-camera-right={8}
         shadow-camera-top={8}
         shadow-camera-bottom={-8}
+        shadow-bias={-0.0001}
       />
 
-      {/* Point lights for accent */}
-      <pointLight position={[0, 2, 0]} intensity={0.3} color="#FFFFFF" />
-      <pointLight position={[-2, 1, 2]} intensity={0.2} color="#8B5CF6" />
+      {/* Point lights for accent - More Strategic Placement */}
+      <pointLight position={[0, 2.5, 0]} intensity={0.25} color="#FFFFFF" />
+      <pointLight position={[-2, 1.5, 2]} intensity={0.15} color="#8B5CF6" distance={4} decay={2} />
       
       {/* Additional Accent Light - Purple/Blue Ambiance */}
-      <pointLight position={[3, 1.5, -3]} intensity={0.25} color="#6366F1" />
-      <pointLight position={[-3, 1.2, 1]} intensity={0.2} color="#A78BFA" />
+      <pointLight position={[3, 1.5, -3]} intensity={0.2} color="#6366F1" distance={5} decay={2} />
+      <pointLight position={[-3, 1.2, 1]} intensity={0.15} color="#A78BFA" distance={4} decay={2} />
 
       {/* Camera Controls - 360 rotation enabled */}
       <OrbitControls

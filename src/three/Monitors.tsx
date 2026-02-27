@@ -4,6 +4,7 @@ import { useStore } from '../store/useStore';
 import * as THREE from 'three';
 import experienceData from '../data/experience.json';
 import projectsData from '../data/projects.json';
+import { metalChrome, metalBrushedAluminum, metalMatteBlack, screenGlass } from './materials';
 
 /** Renders text content onto a CanvasTexture so it lives ON the monitor mesh */
 function useScreenTexture(type: 'experience' | 'projects') {
@@ -236,64 +237,70 @@ export function Monitors() {
     <group position={[0, 1.2, -0.3]}>
       {/* Dual Monitor Arm - Center Post */}
       <mesh position={[0, -0.45, -0.1]} castShadow={castShadow}>
-        <cylinderGeometry args={[0.025, 0.025, 0.9, 12]} />
-        <meshStandardMaterial color="#8A8A8A" roughness={0.3} metalness={0.8} />
+        <cylinderGeometry args={[0.025, 0.025, 0.9, 16]} />
+        <meshStandardMaterial {...metalBrushedAluminum} />
       </mesh>
 
-      {/* Monitor Arm Base */}
+      {/* Monitor Arm Base - Weighted */}
       <mesh position={[0, -0.905, -0.1]} castShadow={castShadow}>
-        <cylinderGeometry args={[0.12, 0.12, 0.02, 16]} />
-        <meshStandardMaterial color="#6A6A6A" roughness={0.3} metalness={0.8} />
+        <cylinderGeometry args={[0.12, 0.12, 0.02, 24]} />
+        <meshStandardMaterial {...metalChrome} />
+      </mesh>
+      
+      {/* Base Rubber Grip */}
+      <mesh position={[0, -0.895, -0.1]} castShadow={castShadow}>
+        <cylinderGeometry args={[0.11, 0.11, 0.005, 24]} />
+        <meshStandardMaterial color="#2A2A2A" roughness={0.95} metalness={0.0} />
       </mesh>
 
       {/* Left Arm Extension */}
       <mesh position={[-0.45, 0.05, -0.1]} castShadow={castShadow}>
         <boxGeometry args={[0.9, 0.025, 0.025]} />
-        <meshStandardMaterial color="#8A8A8A" roughness={0.3} metalness={0.8} />
+        <meshStandardMaterial {...metalBrushedAluminum} />
       </mesh>
 
       {/* Left Arm Cable Clips */}
       <mesh position={[-0.3, 0.05, -0.09]} castShadow={castShadow}>
         <cylinderGeometry args={[0.008, 0.008, 0.015, 8]} />
-        <meshStandardMaterial color="#4A4A4A" roughness={0.4} metalness={0.7} />
+        <meshStandardMaterial color="#1A1A1A" roughness={0.5} metalness={0.6} />
       </mesh>
       <mesh position={[-0.6, 0.05, -0.09]} castShadow={castShadow}>
         <cylinderGeometry args={[0.008, 0.008, 0.015, 8]} />
-        <meshStandardMaterial color="#4A4A4A" roughness={0.4} metalness={0.7} />
+        <meshStandardMaterial color="#1A1A1A" roughness={0.5} metalness={0.6} />
       </mesh>
 
       {/* Left Arm Joint Detail */}
       <mesh position={[-0.9, 0.05, -0.1]} castShadow={castShadow}>
-        <sphereGeometry args={[0.02, 12, 12]} />
-        <meshStandardMaterial color="#6A6A6A" roughness={0.3} metalness={0.8} />
+        <sphereGeometry args={[0.025, 16, 16]} />
+        <meshStandardMaterial {...metalChrome} />
       </mesh>
 
       {/* Right Arm Extension */}
       <mesh position={[0.45, 0.05, -0.1]} castShadow={castShadow}>
         <boxGeometry args={[0.9, 0.025, 0.025]} />
-        <meshStandardMaterial color="#8A8A8A" roughness={0.3} metalness={0.8} />
+        <meshStandardMaterial {...metalBrushedAluminum} />
       </mesh>
 
       {/* Right Arm Cable Clips */}
       <mesh position={[0.3, 0.05, -0.09]} castShadow={castShadow}>
         <cylinderGeometry args={[0.008, 0.008, 0.015, 8]} />
-        <meshStandardMaterial color="#4A4A4A" roughness={0.4} metalness={0.7} />
+        <meshStandardMaterial color="#1A1A1A" roughness={0.5} metalness={0.6} />
       </mesh>
       <mesh position={[0.6, 0.05, -0.09]} castShadow={castShadow}>
         <cylinderGeometry args={[0.008, 0.008, 0.015, 8]} />
-        <meshStandardMaterial color="#4A4A4A" roughness={0.4} metalness={0.7} />
+        <meshStandardMaterial color="#1A1A1A" roughness={0.5} metalness={0.6} />
       </mesh>
 
       {/* Right Arm Joint Detail */}
       <mesh position={[0.9, 0.05, -0.1]} castShadow={castShadow}>
-        <sphereGeometry args={[0.02, 12, 12]} />
-        <meshStandardMaterial color="#6A6A6A" roughness={0.3} metalness={0.8} />
+        <sphereGeometry args={[0.025, 16, 16]} />
+        <meshStandardMaterial {...metalChrome} />
       </mesh>
 
       {/* Center Joint Detail (where arms meet post) */}
       <mesh position={[0, 0.05, -0.1]} castShadow={castShadow}>
         <boxGeometry args={[0.06, 0.04, 0.04]} />
-        <meshStandardMaterial color="#6A6A6A" roughness={0.3} metalness={0.8} />
+        <meshStandardMaterial {...metalChrome} />
       </mesh>
 
       {/* ===== LEFT MONITOR - EXPERIENCE ===== */}
@@ -303,14 +310,44 @@ export function Monitors() {
         onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
         onPointerOut={(e) => { e.stopPropagation(); document.body.style.cursor = 'auto'; }}
       >
-        {/* Frame */}
-        <mesh castShadow={castShadow}>
+        {/* Frame Back */}
+        <mesh position={[0, 0, -0.015]} castShadow={castShadow}>
           <boxGeometry args={[frameW, frameH, 0.03]} />
-          <meshStandardMaterial color="#1A1A1A" roughness={0.3} metalness={0.8} />
+          <meshStandardMaterial {...metalMatteBlack} />
+        </mesh>
+        
+        {/* Bezel Top */}
+        <mesh position={[0, frameH / 2 - 0.005, 0.015]} castShadow={castShadow}>
+          <boxGeometry args={[frameW, 0.01, 0.002]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.3} metalness={0.5} />
+        </mesh>
+        
+        {/* Bezel Bottom */}
+        <mesh position={[0, -frameH / 2 + 0.005, 0.015]} castShadow={castShadow}>
+          <boxGeometry args={[frameW, 0.01, 0.002]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.3} metalness={0.5} />
+        </mesh>
+        
+        {/* Bezel Left */}
+        <mesh position={[-frameW / 2 + 0.005, 0, 0.015]} castShadow={castShadow}>
+          <boxGeometry args={[0.01, frameH, 0.002]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.3} metalness={0.5} />
+        </mesh>
+        
+        {/* Bezel Right */}
+        <mesh position={[frameW / 2 - 0.005, 0, 0.015]} castShadow={castShadow}>
+          <boxGeometry args={[0.01, frameH, 0.002]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.3} metalness={0.5} />
         </mesh>
 
-        {/* Screen with canvas texture (always visible, flush on monitor) */}
-        <mesh position={[0, 0, 0.0151]}>
+        {/* Screen Glass Layer */}
+        <mesh position={[0, 0, 0.0165]}>
+          <planeGeometry args={[screenW, screenH]} />
+          <meshStandardMaterial {...screenGlass} />
+        </mesh>
+
+        {/* Screen with canvas texture (always visible, on top of glass) */}
+        <mesh position={[0, 0, 0.0166]}>
           <planeGeometry args={[screenW, screenH]} />
           <meshBasicMaterial map={experienceTexture} />
         </mesh>
@@ -341,14 +378,44 @@ export function Monitors() {
         onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; }}
         onPointerOut={(e) => { e.stopPropagation(); document.body.style.cursor = 'auto'; }}
       >
-        {/* Frame */}
-        <mesh castShadow={castShadow}>
+        {/* Frame Back */}
+        <mesh position={[0, 0, -0.015]} castShadow={castShadow}>
           <boxGeometry args={[frameW, frameH, 0.03]} />
-          <meshStandardMaterial color="#1A1A1A" roughness={0.3} metalness={0.8} />
+          <meshStandardMaterial {...metalMatteBlack} />
+        </mesh>
+        
+        {/* Bezel Top */}
+        <mesh position={[0, frameH / 2 - 0.005, 0.015]} castShadow={castShadow}>
+          <boxGeometry args={[frameW, 0.01, 0.002]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.3} metalness={0.5} />
+        </mesh>
+        
+        {/* Bezel Bottom */}
+        <mesh position={[0, -frameH / 2 + 0.005, 0.015]} castShadow={castShadow}>
+          <boxGeometry args={[frameW, 0.01, 0.002]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.3} metalness={0.5} />
+        </mesh>
+        
+        {/* Bezel Left */}
+        <mesh position={[-frameW / 2 + 0.005, 0, 0.015]} castShadow={castShadow}>
+          <boxGeometry args={[0.01, frameH, 0.002]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.3} metalness={0.5} />
+        </mesh>
+        
+        {/* Bezel Right */}
+        <mesh position={[frameW / 2 - 0.005, 0, 0.015]} castShadow={castShadow}>
+          <boxGeometry args={[0.01, frameH, 0.002]} />
+          <meshStandardMaterial color="#0A0A0A" roughness={0.3} metalness={0.5} />
         </mesh>
 
-        {/* Screen with canvas texture (always visible, flush on monitor) */}
-        <mesh position={[0, 0, 0.0151]}>
+        {/* Screen Glass Layer */}
+        <mesh position={[0, 0, 0.0165]}>
+          <planeGeometry args={[screenW, screenH]} />
+          <meshStandardMaterial {...screenGlass} />
+        </mesh>
+
+        {/* Screen with canvas texture (always visible, on top of glass) */}
+        <mesh position={[0, 0, 0.0166]}>
           <planeGeometry args={[screenW, screenH]} />
           <meshBasicMaterial map={projectsTexture} />
         </mesh>
