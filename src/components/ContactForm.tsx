@@ -23,7 +23,7 @@ export function ContactForm() {
     
     try {
       // TODO: Replace with Izzy's actual email
-      window.location.href = `mailto:TODO-REPLACE-WITH-ACTUAL-EMAIL@example.com?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:izzyamayacs@gmail.com?subject=${subject}&body=${body}`;
       setStatus('success');
       
       // Reset form after success
@@ -186,7 +186,7 @@ export function ContactForm() {
               LinkedIn
             </a>
             <a 
-              href="mailto:TODO-REPLACE-WITH-ACTUAL-EMAIL@example.com" 
+              href="mailto:izzyamayacs@gmail.com" 
               className="flex-1 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all text-center border border-gray-700 hover:border-green-500 hover:text-green-400"
             >
               Email
