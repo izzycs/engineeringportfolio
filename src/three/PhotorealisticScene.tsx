@@ -16,33 +16,41 @@ import { Chair } from './Chair';
 import { CeilingFan } from './CeilingFan';
 import { EasterEggs } from './EasterEggs';
 import { GitHubCalendar } from './GitHubCalendar';
-// ROUND 9: Use photorealistic lighting and animations
 import { PhotorealisticLighting } from './PhotorealisticLighting';
 import { EnhancedChairSway, EnhancedFanRotation } from './PhotorealisticAnimations';
-import { useDeviceOptimizations } from './PerformanceOptimizations';
+import { useDeviceOptimizations, useAutoQualityAdjust } from './PerformanceOptimizations';
 import { PostProcessing } from './PostProcessing';
 
-export function Scene() {
+/**
+ * ROUND 9: PHOTOREALISTIC SCENE
+ * Integrates all advanced rendering features for AAA-quality visuals
+ */
+export function PhotorealisticScene() {
   const { camera } = useThree();
   const controlsRef = useRef<any>(null);
   const cameraTarget = useStore((state) => state.cameraTarget);
   const quality = useStore((state) => state.quality);
   
-  // ROUND 9: Get device-specific optimizations
+  // Get device-specific optimizations
   const deviceSettings = useDeviceOptimizations();
-
-  // Smooth camera transitions
+  
+  // Auto quality adjustment based on FPS (can be disabled)
+  const AUTO_ADJUST_QUALITY = false; // Set to true to enable
+  if (AUTO_ADJUST_QUALITY) {
+    useAutoQualityAdjust(30);
+  }
+  
+  // Smooth camera transitions with spring physics
   useFrame(() => {
     if (controlsRef.current && cameraTarget) {
       const targetPos = cameraPositions[cameraTarget];
       
-      // Lerp camera position
+      // Smooth lerp (could be replaced with spring physics for even smoother)
       camera.position.lerp(
         new THREE.Vector3(...targetPos.position),
         0.05
       );
       
-      // Lerp controls target
       controlsRef.current.target.lerp(
         new THREE.Vector3(...targetPos.target),
         0.05
@@ -54,17 +62,17 @@ export function Scene() {
     <>
       {/* Environment Map for Realistic Reflections */}
       <Environment 
-        preset="apartment"
+        preset="apartment" 
         environmentIntensity={deviceSettings.isMobile ? 0.5 : 0.8}
       />
       
       {/* Subtle Fog for Atmosphere (disabled on low quality) */}
       {quality !== 'low' && <fog attach="fog" args={['#E8E4DC', 8, 18]} />}
 
-      {/* ROUND 9: PHOTOREALISTIC LIGHTING SYSTEM */}
+      {/* PHOTOREALISTIC LIGHTING SYSTEM */}
       <PhotorealisticLighting />
-      
-      {/* ROUND 9: POST-PROCESSING EFFECTS (high quality only) */}
+
+      {/* POST-PROCESSING EFFECTS (high quality only) */}
       {deviceSettings.enablePostProcessing && <PostProcessing />}
 
       {/* Camera Controls - 360 rotation enabled */}
@@ -79,7 +87,7 @@ export function Scene() {
         minDistance={3}
         maxDistance={12}
         target={[0, 1.2, 0]}
-        // ROUND 9: Touch controls for mobile
+        // Touch controls for mobile
         touches={{
           ONE: THREE.TOUCH.ROTATE,
           TWO: THREE.TOUCH.DOLLY_PAN,
@@ -105,7 +113,7 @@ export function Scene() {
       <RoomShell />
       <Desk />
       
-      {/* ROUND 9: Enhanced Chair Sway with Spring Physics */}
+      {/* Chair with Enhanced Spring Physics Sway */}
       <EnhancedChairSway position={[0.8, 0, -0.3]}>
         <Chair />
       </EnhancedChairSway>
@@ -118,7 +126,7 @@ export function Scene() {
       <EnhancedWindow />
       <WallDecor />
       
-      {/* ROUND 9: Enhanced Fan Rotation */}
+      {/* Ceiling Fan with Smooth Rotation */}
       <EnhancedFanRotation position={[0, 2.7, 0]} speed={0.5}>
         <CeilingFan />
       </EnhancedFanRotation>

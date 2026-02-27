@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type QualityLevel = 'high' | 'low';
+export type QualityLevel = 'high' | 'medium' | 'low';
 export type CameraTarget = 'default' | 'leftMonitor' | 'rightMonitor' | 'bookshelf' | 'tv' | 'window';
 
 interface CameraPosition {

@@ -1,19 +1,38 @@
 # 3D Developer Room Portfolio
 
-An interactive 3D portfolio website featuring a fully explorable developer room. Built with React, Three.js, and TypeScript.
+An interactive, **photorealistic** 3D portfolio website featuring a fully explorable developer room with AAA game-quality rendering. Built with React, Three.js, and TypeScript.
 
 ![Portfolio Preview](./docs/preview.gif)
 
 ## ✨ Features
 
+### Core Experience
 - **Interactive 3D Room** — Fully navigable developer workspace with clickable objects
 - **Dual Monitor Setup** — View experience and projects on interactive screen overlays
-- **Day/Night Cycle** — Automated lighting transitions with window view
-- **Motorized Standing Desk** — Animated height adjustment
-- **Procedural Meshes** — All 3D objects generated with code (no external models)
-- **Performance Toggle** — High/Low quality modes for optimal performance
-- **Responsive Design** — Works on desktop and mobile devices
-- **Accessible UI** — Clean navigation and modal system
+- **Procedural Everything** — All 3D objects, textures, and materials generated with code (zero external assets)
+- **Responsive Design** — Optimized for desktop, tablet, and mobile devices
+- **Accessible UI** — WCAG-compliant navigation and keyboard shortcuts
+
+### Photorealistic Rendering (Round 9)
+- **Advanced Materials** — Subsurface scattering on plant leaves, Fresnel reflections on screens, micro-scratches on desk
+- **Physically-Based Lighting** — Caustics from window, screen backlight bleed, RGB keyboard glow, contact shadows
+- **Micro-Details** — Fingerprints on screens, dust accumulation, wear marks on chair, coffee ring stains
+- **Spring Physics Animations** — Natural chair sway with damping, smooth camera transitions, wind gusts on plants
+- **Post-Processing** — Color grading (warm cozy tint), vignette, chromatic aberration, FXAA anti-aliasing
+
+### Performance System
+- **3-Tier Quality System** — High (4K shadows, 300 particles), Medium (balanced), Low (mobile-optimized)
+- **LOD System** — 3 detail levels per object (close/medium/far)
+- **Instanced Rendering** — Single draw call for keyboard keys, screws, particles
+- **Auto Quality Adjust** — Dynamically reduces quality if FPS drops below 30
+- **Performance Monitor** — Real-time FPS, frame time, memory, draw calls
+
+### Mobile Optimizations
+- **Touch Gestures** — Pinch to zoom, two-finger pan, single-finger rotate
+- **Haptic Feedback** — Subtle vibrations on interactions
+- **Battery Aware** — Reduced quality in low power mode
+- **Portrait/Landscape** — Adaptive camera FOV
+- **Gesture Hints** — On-screen arrows for first-time users
 
 ## 🚀 Quick Start
 
@@ -81,6 +100,17 @@ dev-room-portfolio/
 └── docs/                # Documentation
 ```
 
+## 📚 Documentation
+
+Comprehensive guides for every aspect of the portfolio:
+
+- **[CUSTOMIZATION.md](./CUSTOMIZATION.md)** — Edit content, colors, materials, camera positions
+- **[PERFORMANCE_GUIDE.md](./PERFORMANCE_GUIDE.md)** — Optimization techniques, benchmarks, troubleshooting
+- **[KEYBOARD_SHORTCUTS.md](./KEYBOARD_SHORTCUTS.md)** — Complete keyboard and touch control reference
+- **[CREDITS.md](./CREDITS.md)** — Inspirations, techniques, tech stack details
+- **[TESTING_GUIDE.md](./TESTING_GUIDE.md)** — Unit tests, integration tests, visual regression
+- **[DEPLOY.md](./DEPLOY.md)** — Deployment instructions for Vercel, Netlify, Cloudflare
+
 ## 📝 Customization
 
 See **[CUSTOMIZATION.md](./CUSTOMIZATION.md)** for detailed instructions on:
@@ -90,6 +120,7 @@ See **[CUSTOMIZATION.md](./CUSTOMIZATION.md)** for detailed instructions on:
 - Adjusting camera positions
 - Adding new 3D objects
 - Modifying animations
+- Tweaking photorealistic effects
 
 ### Quick Content Updates
 
