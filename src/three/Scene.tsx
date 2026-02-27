@@ -16,11 +16,31 @@ import { Chair } from './Chair';
 import { CeilingFan } from './CeilingFan';
 import { EasterEggs } from './EasterEggs';
 import { GitHubCalendar } from './GitHubCalendar';
-// ROUND 9: Use photorealistic lighting and animations
-import { PhotorealisticLighting } from './PhotorealisticLighting';
+// ROUND 9: Use photorealistic animations
 import { EnhancedChairSway, EnhancedFanRotation } from './PhotorealisticAnimations';
 import { useDeviceOptimizations } from './PerformanceOptimizations';
 import { PostProcessing } from './PostProcessing';
+// ROUND 10: Personal touches and interactive elements
+import { 
+  DeskNameplate, 
+  DataEngineeringBooks, 
+  PersonalPhotos, 
+  NBAMerchandise,
+  AnimeCollectibles,
+  WaterBottle,
+  DeskSnacks,
+  ChargingDevices,
+  PostItNotes,
+  PoweredLaptop,
+} from './PersonalTouches';
+import { DataVizPrints, AwardsCertificates, Whiteboard, Calendar2026 } from './DataVizWallArt';
+import { 
+  InteractiveCoffeeMug, 
+  BouncingBasketball, 
+  InteractivePlant 
+} from './InteractiveElements';
+import { TimeOfDayLighting } from './TimeOfDayLighting';
+import { AdvancedEasterEggs } from './AdvancedEasterEggs';
 
 export function Scene() {
   const { camera } = useThree();
@@ -61,8 +81,8 @@ export function Scene() {
       {/* Subtle Fog for Atmosphere (disabled on low quality) */}
       {quality !== 'low' && <fog attach="fog" args={['#E8E4DC', 8, 18]} />}
 
-      {/* ROUND 9: PHOTOREALISTIC LIGHTING SYSTEM */}
-      <PhotorealisticLighting />
+      {/* ROUND 10: TIME-OF-DAY LIGHTING SYSTEM (replaces PhotorealisticLighting) */}
+      <TimeOfDayLighting />
       
       {/* ROUND 9: POST-PROCESSING EFFECTS (high quality only) */}
       {deviceSettings.enablePostProcessing && <PostProcessing />}
@@ -125,6 +145,32 @@ export function Scene() {
       
       <EasterEggs />
       <GitHubCalendar />
+      
+      {/* ROUND 10: PERSONAL TOUCHES */}
+      <DeskNameplate />
+      <DataEngineeringBooks />
+      <PersonalPhotos />
+      <NBAMerchandise />
+      <AnimeCollectibles />
+      <WaterBottle />
+      <DeskSnacks />
+      <ChargingDevices />
+      <PostItNotes />
+      <PoweredLaptop />
+      
+      {/* ROUND 10: WALL DECORATIONS */}
+      <DataVizPrints />
+      <AwardsCertificates />
+      <Whiteboard />
+      <Calendar2026 />
+      
+      {/* ROUND 10: INTERACTIVE ELEMENTS */}
+      <InteractiveCoffeeMug position={[0.35, 0.04, 0.55]} />
+      <BouncingBasketball initialPosition={[0.5, 0.76, -0.1]} />
+      <InteractivePlant position={[0.55, 0.02, -0.35]} />
+      
+      {/* ROUND 10: ADVANCED EASTER EGGS */}
+      <AdvancedEasterEggs />
     </>
   );
 }

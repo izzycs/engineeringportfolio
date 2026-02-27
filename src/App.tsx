@@ -10,6 +10,10 @@ import { BackButton } from './components/BackButton';
 import { LoadingScreen } from './components/LoadingScreen';
 import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { useStore } from './store/useStore';
+// ROUND 10: New UI components
+import { TimeOfDayControl } from './three/TimeOfDayLighting';
+import { SoundControl } from './three/SoundEffects';
+import { AccessibilityPanel, SkipToContent } from './three/AccessibilityFeatures';
 
 function App() {
   const quality = useStore((state) => state.quality);
@@ -36,6 +40,8 @@ function App() {
     <>
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
       
+      <SkipToContent />
+      
       <Canvas
         shadows={quality === 'high'}
         camera={{ position: cameraPosition, fov: cameraFov }}
@@ -48,13 +54,20 @@ function App() {
         <Scene />
       </Canvas>
       
-      <Nav />
-      <Instructions />
-      <BackButton />
-      <ProjectModal />
-      <ContactForm />
-      <PerformanceToggle />
-      <KeyboardShortcuts />
+      <main id="main-content">
+        <Nav />
+        <Instructions />
+        <BackButton />
+        <ProjectModal />
+        <ContactForm />
+        <PerformanceToggle />
+        <KeyboardShortcuts />
+        
+        {/* ROUND 10: New UI Controls */}
+        <TimeOfDayControl />
+        <SoundControl />
+        <AccessibilityPanel />
+      </main>
     </>
   );
 }

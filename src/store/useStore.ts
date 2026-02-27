@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 export type QualityLevel = 'high' | 'medium' | 'low';
 export type CameraTarget = 'default' | 'leftMonitor' | 'rightMonitor' | 'bookshelf' | 'tv' | 'window';
+export type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 
 interface CameraPosition {
   position: [number, number, number];
@@ -50,6 +51,10 @@ interface StoreState {
   quality: QualityLevel;
   setQuality: (quality: QualityLevel) => void;
   
+  // Time of Day
+  timeOfDay: TimeOfDay;
+  setTimeOfDay: (time: TimeOfDay) => void;
+  
   // UI
   showInstructions: boolean;
   setShowInstructions: (show: boolean) => void;
@@ -76,6 +81,10 @@ export const useStore = create<StoreState>((set) => ({
   // Quality
   quality: 'high',
   setQuality: (quality) => set({ quality }),
+  
+  // Time of Day
+  timeOfDay: 'afternoon',
+  setTimeOfDay: (time) => set({ timeOfDay: time }),
   
   // UI
   showInstructions: true,
