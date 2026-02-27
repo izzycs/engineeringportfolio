@@ -43,10 +43,10 @@ export function Instructions() {
           <div className="bg-blue-600/20 border border-blue-500/50 rounded p-3 mb-4 text-xs md:text-sm">
             <strong className="block mb-2">📱 Mobile Controls:</strong>
             <ul className="space-y-1 text-gray-300">
-              <li>• <strong>One finger drag</strong> — Rotate camera</li>
-              <li>• <strong>Two finger pinch</strong> — Zoom in/out</li>
-              <li>• <strong>Tap objects</strong> — Focus view</li>
-              <li>• <strong>Nav menu</strong> — Quick navigation</li>
+              <li>• <strong>Swipe to rotate 360°</strong> — Full room exploration</li>
+              <li>• <strong>Pinch to zoom</strong> — Get closer or farther</li>
+              <li>• <strong>Two-finger drag to pan</strong> — Move around the room</li>
+              <li>• <strong>Tap objects</strong> — Focus on specific areas</li>
             </ul>
           </div>
         )}

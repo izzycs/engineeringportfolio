@@ -28,9 +28,9 @@ function App() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Adjust camera for mobile
-  const cameraPosition: [number, number, number] = isMobile ? [0, 1.6, 7] : [0, 1.6, 5];
-  const cameraFov = isMobile ? 70 : 60;
+  // Adjust camera for mobile - farther back for full room view
+  const cameraPosition: [number, number, number] = isMobile ? [0, 2.5, 8] : [0, 1.6, 5];
+  const cameraFov = isMobile ? 75 : 60;
 
   return (
     <>
@@ -43,7 +43,7 @@ function App() {
           antialias: quality === 'high',
           powerPreference: isMobile ? 'low-power' : 'high-performance'
         }}
-        dpr={isMobile ? [1, 1.5] : [1, 2]}
+        dpr={Math.min(window.devicePixelRatio, 2)}
       >
         <Scene />
       </Canvas>

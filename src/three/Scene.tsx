@@ -92,8 +92,12 @@ export function Scene() {
         ref={controlsRef}
         enableDamping
         dampingFactor={0.05}
-        minDistance={2}
-        maxDistance={8}
+        enableRotate={true}
+        rotateSpeed={1.5}
+        enablePan={true}
+        panSpeed={1}
+        minDistance={3}
+        maxDistance={12}
         target={[0, 1.2, 0]}
       />
 
