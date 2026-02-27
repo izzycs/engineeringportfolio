@@ -1,24 +1,44 @@
 import { useState } from 'react';
 import { useStore } from '../store/useStore';
 
+type FormStatus = 'idle' | 'success' | 'error';
+
 export function ContactForm() {
   const showContactForm = useStore((state) => state.showContactForm);
   const setShowContactForm = useStore((state) => state.setShowContactForm);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState<FormStatus>('idle');
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   if (!showContactForm) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     // Simple mailto implementation
     const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
     );
-    // TODO: Replace with Izzy's actual email
-    window.location.href = `mailto:TODO-REPLACE-WITH-ACTUAL-EMAIL@example.com?subject=${subject}&body=${body}`;
-    setShowContactForm(false);
+    
+    try {
+      // TODO: Replace with Izzy's actual email
+      window.location.href = `mailto:TODO-REPLACE-WITH-ACTUAL-EMAIL@example.com?subject=${subject}&body=${body}`;
+      setStatus('success');
+      
+      // Reset form after success
+      setTimeout(() => {
+        setFormData({ name: '', email: '', message: '' });
+        setStatus('idle');
+        setShowContactForm(false);
+      }, 2000);
+    } catch (error) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
+    }
   };
+
+  const isFieldFilled = (field: keyof typeof formData) => formData[field].length > 0;
 
   return (
     <div
@@ -26,71 +46,149 @@ export function ContactForm() {
       onClick={() => setShowContactForm(false)}
     >
       <div
-        className="bg-gray-900 border border-green-500 rounded-lg p-6 max-w-md w-full mx-4 text-white"
+        className="bg-gradient-to-br from-gray-900 via-gray-900 to-purple-900/20 border-2 border-green-500/50 rounded-xl p-8 max-w-md w-full mx-4 text-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-start mb-4">
-          <h2 className="text-2xl font-bold">Get In Touch</h2>
+        {/* Header */}
+        <div className="flex justify-between items-start mb-6">
+          <div>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+              Get In Touch
+            </h2>
+            <p className="text-gray-400 text-sm mt-1">Let's build something amazing</p>
+          </div>
           <button
             onClick={() => setShowContactForm(false)}
-            className="text-gray-400 hover:text-white text-2xl leading-none"
+            className="text-gray-400 hover:text-white text-3xl leading-none transition-colors hover:rotate-90 duration-300"
           >
             ×
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
+        {/* Status Messages */}
+        {status === 'success' && (
+          <div className="mb-4 p-3 bg-green-500/20 border border-green-500 rounded-lg text-green-400 text-sm flex items-center gap-2">
+            <span className="text-lg">✓</span>
+            <span>Message sent! Opening your email client...</span>
+          </div>
+        )}
+        {status === 'error' && (
+          <div className="mb-4 p-3 bg-red-500/20 border border-red-500 rounded-lg text-red-400 text-sm flex items-center gap-2">
+            <span className="text-lg">✕</span>
+            <span>Something went wrong. Please try again.</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Name Field */}
+          <div className="relative">
             <input
               type="text"
+              id="name"
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded focus:border-green-500 focus:outline-none"
+              onFocus={() => setFocusedField('name')}
+              onBlur={() => setFocusedField(null)}
+              className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-lg focus:border-green-500 focus:outline-none transition-all peer placeholder-transparent"
+              placeholder="Name"
             />
+            <label
+              htmlFor="name"
+              className={`absolute left-4 transition-all duration-200 pointer-events-none ${
+                focusedField === 'name' || isFieldFilled('name')
+                  ? '-top-2.5 text-xs bg-gray-900 px-2 text-green-400'
+                  : 'top-3 text-gray-400'
+              }`}
+            >
+              Name
+            </label>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+          {/* Email Field */}
+          <div className="relative">
             <input
               type="email"
+              id="email"
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded focus:border-green-500 focus:outline-none"
+              onFocus={() => setFocusedField('email')}
+              onBlur={() => setFocusedField(null)}
+              className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-lg focus:border-green-500 focus:outline-none transition-all peer placeholder-transparent"
+              placeholder="Email"
             />
+            <label
+              htmlFor="email"
+              className={`absolute left-4 transition-all duration-200 pointer-events-none ${
+                focusedField === 'email' || isFieldFilled('email')
+                  ? '-top-2.5 text-xs bg-gray-900 px-2 text-green-400'
+                  : 'top-3 text-gray-400'
+              }`}
+            >
+              Email
+            </label>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Message</label>
+          {/* Message Field */}
+          <div className="relative">
             <textarea
+              id="message"
               required
-              rows={4}
+              rows={5}
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded focus:border-green-500 focus:outline-none resize-none"
+              onFocus={() => setFocusedField('message')}
+              onBlur={() => setFocusedField(null)}
+              className="w-full px-4 py-3 bg-gray-800/50 border-2 border-gray-700 rounded-lg focus:border-green-500 focus:outline-none transition-all resize-none peer placeholder-transparent"
+              placeholder="Message"
             />
+            <label
+              htmlFor="message"
+              className={`absolute left-4 transition-all duration-200 pointer-events-none ${
+                focusedField === 'message' || isFieldFilled('message')
+                  ? '-top-2.5 text-xs bg-gray-900 px-2 text-green-400'
+                  : 'top-3 text-gray-400'
+              }`}
+            >
+              Message
+            </label>
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 rounded transition-colors font-medium"
+            disabled={status === 'success'}
+            className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-600 disabled:to-gray-700 rounded-lg transition-all font-semibold text-lg shadow-lg hover:shadow-green-500/50 hover:scale-[1.02] active:scale-[0.98] duration-200"
           >
-            Send Message
+            {status === 'success' ? '✓ Message Sent!' : 'Send Message'}
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-gray-700">
-          <h3 className="text-sm font-semibold mb-3">Connect</h3>
+        {/* Social Links */}
+        <div className="mt-8 pt-6 border-t border-gray-800">
+          <h3 className="text-sm font-semibold mb-3 text-gray-400">Or connect via:</h3>
           <div className="flex gap-4">
-            <a href="https://github.com/izzycs" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">
+            <a 
+              href="https://github.com/izzycs" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex-1 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all text-center border border-gray-700 hover:border-blue-500 hover:text-blue-400"
+            >
               GitHub
             </a>
-            <a href="https://www.linkedin.com/in/izzycs" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 transition-colors">
+            <a 
+              href="https://www.linkedin.com/in/izzycs" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex-1 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all text-center border border-gray-700 hover:border-blue-500 hover:text-blue-400"
+            >
               LinkedIn
             </a>
-            <a href="mailto:TODO-REPLACE-WITH-ACTUAL-EMAIL@example.com" className="text-blue-400 hover:text-blue-300 transition-colors">
+            <a 
+              href="mailto:TODO-REPLACE-WITH-ACTUAL-EMAIL@example.com" 
+              className="flex-1 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-all text-center border border-gray-700 hover:border-green-500 hover:text-green-400"
+            >
               Email
             </a>
           </div>

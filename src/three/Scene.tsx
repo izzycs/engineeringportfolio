@@ -12,6 +12,9 @@ import { Window } from './Window';
 import { DeskProps } from './DeskProps';
 import { DeskLamp } from './DeskLamp';
 import { WallDecor } from './WallDecor';
+import { Chair } from './Chair';
+import { CeilingFan } from './CeilingFan';
+import { EasterEggs } from './EasterEggs';
 
 export function Scene() {
   const { camera } = useThree();
@@ -99,6 +102,7 @@ export function Scene() {
       {/* Scene Objects */}
       <RoomShell />
       <Desk />
+      <Chair />
       <Monitors />
       <DeskProps />
       <DeskLamp />
@@ -106,6 +110,8 @@ export function Scene() {
       <TV />
       <Window />
       <WallDecor />
+      <CeilingFan />
+      <EasterEggs />
     </>
   );
 }
