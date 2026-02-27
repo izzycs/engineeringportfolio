@@ -1,0 +1,20 @@
+OG IMAGE PLACEHOLDER
+
+To create your OG image:
+
+1. Take a screenshot of your 3D portfolio in action
+2. Recommended size: 1200x630 pixels
+3. Save as: public/assets/og-image.png
+
+Alternatively, use a design tool to create a branded image:
+- Include: "Izzy Amaya - Data Engineer"
+- Show: A preview of the 3D room
+- Style: Match your portfolio aesthetic
+- Format: PNG or JPG
+
+Tools you can use:
+- Take a screenshot with your browser DevTools at 1200x630
+- Use Figma, Canva, or Photoshop
+- Use a screenshot tool and crop to 1200x630
+
+The index.html already references /assets/og-image.png

@@ -1,13 +1,20 @@
 import { useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { soundEffects } from '../utils/soundEffects';
 
 export function EasterEggs() {
+  const { camera } = useThree();
+  
   // Basketball state
   const basketballRef = useRef<THREE.Mesh>(null);
   const [ballBouncing, setBallBouncing] = useState(false);
   const [ballVelocity, setBallVelocity] = useState(0);
   const bounceTime = useRef(0);
+  
+  // Camera shake state
+  const cameraShakeIntensity = useRef(0);
+  const cameraOriginalPosition = useRef(new THREE.Vector3());
   
   // Portal state
   const portalRef = useRef<THREE.Mesh>(null);
@@ -32,6 +39,13 @@ export function EasterEggs() {
         setBallVelocity(-newVelocity * 0.7); // Bounce with energy loss
         basketballRef.current.position.y = 0.15;
         
+        // Trigger camera shake and sound on bounce
+        const impactStrength = Math.abs(newVelocity);
+        if (impactStrength > 0.5) {
+          cameraShakeIntensity.current = Math.min(impactStrength * 0.02, 0.08);
+          soundEffects.play('bounce');
+        }
+        
         // Stop bouncing after energy dissipates
         if (Math.abs(newVelocity) < 0.5) {
           setBallBouncing(false);
@@ -45,6 +59,26 @@ export function EasterEggs() {
       // Rotate while bouncing
       basketballRef.current.rotation.x += delta * 3;
       basketballRef.current.rotation.z += delta * 2;
+    }
+    
+    // Camera shake effect
+    if (cameraShakeIntensity.current > 0.001) {
+      // Save original position on first shake frame
+      if (cameraShakeIntensity.current > 0.01) {
+        cameraOriginalPosition.current.copy(camera.position);
+      }
+      
+      // Apply shake
+      const shakeX = (Math.random() - 0.5) * cameraShakeIntensity.current;
+      const shakeY = (Math.random() - 0.5) * cameraShakeIntensity.current;
+      const shakeZ = (Math.random() - 0.5) * cameraShakeIntensity.current;
+      
+      camera.position.x += shakeX;
+      camera.position.y += shakeY;
+      camera.position.z += shakeZ;
+      
+      // Decay shake intensity with spring-like damping
+      cameraShakeIntensity.current *= 0.9;
     }
     
     // Portal color cycling
@@ -67,6 +101,7 @@ export function EasterEggs() {
       setBallVelocity(3); // Initial upward velocity
       bounceTime.current = 0;
       setClickCount((prev) => prev + 1);
+      soundEffects.play('click');
     }
   };
 
@@ -77,7 +112,10 @@ export function EasterEggs() {
         ref={basketballRef}
         position={[3.2, 0.15, 3.2]}
         onClick={handleBasketballClick}
-        onPointerOver={() => document.body.style.cursor = 'pointer'}
+        onPointerOver={() => {
+          document.body.style.cursor = 'pointer';
+          soundEffects.play('hover');
+        }}
         onPointerOut={() => document.body.style.cursor = 'default'}
       >
         <sphereGeometry args={[0.15, 16, 16]} />
@@ -102,6 +140,7 @@ export function EasterEggs() {
         onPointerOver={() => {
           setPortalHovered(true);
           document.body.style.cursor = 'pointer';
+          soundEffects.play('hover');
         }}
         onPointerOut={() => {
           setPortalHovered(false);
@@ -109,6 +148,7 @@ export function EasterEggs() {
         }}
         onClick={() => {
           setClickCount((prev) => prev + 1);
+          soundEffects.play('click');
           alert(`🎉 You found the portal! Total interactions: ${clickCount + 1}`);
         }}
       >

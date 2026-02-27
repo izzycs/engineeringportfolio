@@ -9,12 +9,46 @@ interface StockData {
   isPositive: boolean;
 }
 
+type MarketStatus = 'open' | 'closed' | 'pre-market' | 'after-hours';
+
+function getMarketStatus(): MarketStatus {
+  const now = new Date();
+  
+  // Convert to ET (market hours are in ET)
+  const etTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const hours = etTime.getHours();
+  const minutes = etTime.getMinutes();
+  const day = etTime.getDay(); // 0 = Sunday, 6 = Saturday
+  
+  // Weekend check
+  if (day === 0 || day === 6) {
+    return 'closed';
+  }
+  
+  const timeInMinutes = hours * 60 + minutes;
+  const marketOpen = 9 * 60 + 30;  // 9:30 AM
+  const marketClose = 16 * 60;      // 4:00 PM
+  const preMarketStart = 4 * 60;    // 4:00 AM
+  const afterHoursEnd = 20 * 60;    // 8:00 PM
+  
+  if (timeInMinutes >= marketOpen && timeInMinutes < marketClose) {
+    return 'open';
+  } else if (timeInMinutes >= preMarketStart && timeInMinutes < marketOpen) {
+    return 'pre-market';
+  } else if (timeInMinutes >= marketClose && timeInMinutes < afterHoursEnd) {
+    return 'after-hours';
+  }
+  
+  return 'closed';
+}
+
 export function TV() {
   const quality = useStore((state) => state.quality);
   const setCameraTarget = useStore((state) => state.setCameraTarget);
   const castShadow = quality === 'high';
   const [stockData, setStockData] = useState<StockData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [marketStatus, setMarketStatus] = useState<MarketStatus>(getMarketStatus());
 
   useEffect(() => {
     const fetchStockData = async () => {
@@ -46,13 +80,49 @@ export function TV() {
     };
 
     fetchStockData();
-    // Refresh every 60 seconds
-    const interval = setInterval(fetchStockData, 60000);
-    return () => clearInterval(interval);
+    
+    // Refresh stock data every 60 seconds
+    const stockInterval = setInterval(fetchStockData, 60000);
+    
+    // Update market status every minute
+    const statusInterval = setInterval(() => {
+      setMarketStatus(getMarketStatus());
+    }, 60000);
+    
+    return () => {
+      clearInterval(stockInterval);
+      clearInterval(statusInterval);
+    };
   }, []);
 
   const handleClick = () => {
     setCameraTarget('tv');
+  };
+
+  const getStatusColor = () => {
+    switch (marketStatus) {
+      case 'open':
+        return '#00ff00';
+      case 'pre-market':
+        return '#ffaa00';
+      case 'after-hours':
+        return '#ff8800';
+      default:
+        return '#ff0000';
+    }
+  };
+
+  const getStatusLabel = () => {
+    switch (marketStatus) {
+      case 'open':
+        return 'MARKET OPEN';
+      case 'pre-market':
+        return 'PRE-MARKET';
+      case 'after-hours':
+        return 'AFTER HOURS';
+      default:
+        return 'MARKET CLOSED';
+    }
   };
 
   return (
@@ -118,10 +188,11 @@ export function TV() {
                 width: '8px',
                 height: '8px',
                 borderRadius: '50%',
-                backgroundColor: '#00ff00',
-                animation: 'pulse 2s infinite'
+                backgroundColor: getStatusColor(),
+                animation: marketStatus === 'open' ? 'pulse 2s infinite' : 'none',
+                boxShadow: marketStatus === 'open' ? `0 0 8px ${getStatusColor()}` : 'none'
               }} />
-              LIVE
+              {getStatusLabel()}
             </div>
             
             <div style={{ 
@@ -159,6 +230,10 @@ export function TV() {
               textAlign: 'center'
             }}>
               SPY ETF Tracking Index
+              <br />
+              <span style={{ fontSize: '10px' }}>
+                Market Hours: 9:30 AM - 4:00 PM ET
+              </span>
             </div>
           </>
         ) : (

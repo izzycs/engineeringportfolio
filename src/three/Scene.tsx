@@ -15,6 +15,7 @@ import { WallDecor } from './WallDecor';
 import { Chair } from './Chair';
 import { CeilingFan } from './CeilingFan';
 import { EasterEggs } from './EasterEggs';
+import { GitHubCalendar } from './GitHubCalendar';
 
 export function Scene() {
   const { camera } = useThree();
@@ -112,6 +113,7 @@ export function Scene() {
       <WallDecor />
       <CeilingFan />
       <EasterEggs />
+      <GitHubCalendar />
     </>
   );
 }

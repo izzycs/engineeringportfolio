@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Scene } from './three/Scene';
 import { Nav } from './components/Nav';
@@ -14,6 +14,23 @@ import { useStore } from './store/useStore';
 function App() {
   const quality = useStore((state) => state.quality);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Detect mobile for camera positioning
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Adjust camera for mobile
+  const cameraPosition: [number, number, number] = isMobile ? [0, 1.6, 7] : [0, 1.6, 5];
+  const cameraFov = isMobile ? 70 : 60;
 
   return (
     <>
@@ -21,8 +38,12 @@ function App() {
       
       <Canvas
         shadows={quality === 'high'}
-        camera={{ position: [0, 1.6, 5], fov: 60 }}
-        gl={{ antialias: quality === 'high' }}
+        camera={{ position: cameraPosition, fov: cameraFov }}
+        gl={{ 
+          antialias: quality === 'high',
+          powerPreference: isMobile ? 'low-power' : 'high-performance'
+        }}
+        dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
         <Scene />
       </Canvas>
