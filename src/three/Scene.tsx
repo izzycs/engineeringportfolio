@@ -10,6 +10,7 @@ import { Bookshelf } from './Bookshelf';
 import { TV } from './TV';
 import { Window } from './Window';
 import { DeskProps } from './DeskProps';
+import { DeskLamp } from './DeskLamp';
 
 export function Scene() {
   const { camera } = useThree();
@@ -92,6 +93,7 @@ export function Scene() {
       <Desk />
       <Monitors />
       <DeskProps />
+      <DeskLamp />
       <Bookshelf />
       <TV />
       <Window />
