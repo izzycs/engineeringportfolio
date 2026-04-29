@@ -1,29 +1,41 @@
 [
   {
     "id": "msrb",
-    "title": "Data Governance / Data Quality Engineer",
-    "company": "MSRB",
-    "dates": "2023 — Present",
+    "title": "Senior Data Governance Associate",
+    "company": "MSRB (Municipal Securities Rulemaking Board) Washington, D.C.",
+    "dates": "Jan 2023 – Present",
     "bullets": [
-      "Built SQL-based data quality checks across 50+ validation rules using Great Expectations",
-      "Designed and maintained ETL/ELT pipelines processing 10M+ records daily on AWS",
-      "Created real-time dashboards monitoring rule pass/fail rates with Python and Tableau",
-      "Automated data profiling and anomaly detection using AWS Glue and Lambda",
-      "Implemented data lineage tracking and metadata management across enterprise datasets"
+      "Build complex SQL queries against data in AWS S3, cataloged with Glue and queried via Athena, to surface insights for regulatory data initiatives.",
+      "Train and evaluate ML models that parse municipal bond official statements, using F1 scores and visualizations to guide model improvements.",
+      "Maintain enterprise metadata (definitions, quality rules, lineage) and develop Excel reports/dashboards on data governance KPIs for stakeholders.",
+      "Monitor compliance with data management policies; escalate exceptions and resolve master data management cases to maintain data integrity."
     ],
-    "tags": ["SQL", "AWS", "Python", "Great Expectations", "ETL", "Tableau", "Data Governance"]
+    "tags": ["SQL", "AWS S3", "Glue", "Athena", "ML", "Data Governance", "Metadata", "Excel"]
   },
   {
-    "id": "datacenter",
+    "id": "bytedance",
     "title": "Data Center Technician",
-    "company": "Night Shift Operations",
-    "dates": "2021 — 2023",
+    "company": "ByteDance Ashburn, VA",
+    "dates": "Mar 2024 – Mar 2026",
     "bullets": [
-      "Managed server infrastructure supporting data pipelines and analytics workloads",
-      "Monitored database performance and optimized query execution on production systems",
-      "Configured networking for distributed data processing clusters",
-      "Implemented automated backup and disaster recovery procedures for critical data stores"
+      "Installed and configured enterprise server hardware and structured cabling in production data center environments.",
+      "Performed hardware break/fix on rack-mount servers to minimize downtime in mission-critical systems.",
+      "Executed rack & stack operations, including component installs, cable management, and inventory tracking.",
+      "Configured and troubleshot NVMe storage, ePDUs, and network switches; replaced fiber optic cabling to industry standards."
     ],
-    "tags": ["Infrastructure", "Linux", "Networking", "Databases", "Monitoring"]
+    "tags": ["Servers", "NVMe", "Networking", "Cabling", "Rack & Stack", "Hardware"]
+  },
+  {
+    "id": "itrenew",
+    "title": "Data Center Technician",
+    "company": "ITRenew Sterling, VA",
+    "dates": "Dec 2021 – Jan 2023",
+    "bullets": [
+      "Decommissioned and maintained rack-mount servers, blade systems, and storage arrays as part of large-scale rack decommissioning projects.",
+      "Performed secure data wiping on desktops, servers, and peripheral data-bearing devices per industry destruction standards.",
+      "Diagnosed hardware faults and applied targeted troubleshooting for rapid remediation across Windows, Linux, and macOS systems.",
+      "Ensured operations adhered to industry best practices, security standards, and regulatory compliance frameworks."
+    ],
+    "tags": ["Decommissioning", "Data Wiping", "Linux", "Windows", "macOS", "Compliance"]
   }
 ]

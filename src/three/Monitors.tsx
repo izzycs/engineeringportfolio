@@ -11,13 +11,18 @@ import { MonitorWobble } from './SubtleAnimations';
 function useScreenTexture(type: 'experience' | 'projects') {
   const texture = useMemo(() => {
     const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 340;
+    const W = 512;
+    const H = 400;
+    canvas.width = W;
+    canvas.height = H;
     const ctx = canvas.getContext('2d')!;
 
     // Background
     ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0, 0, 512, 340);
+    ctx.fillRect(0, 0, W, H);
+
+    const truncate = (text: string, max: number) =>
+      text.length > max ? text.substring(0, max - 1) + '…' : text;
 
     if (type === 'experience') {
       // Title
@@ -25,36 +30,37 @@ function useScreenTexture(type: 'experience' | 'projects') {
       ctx.font = 'bold 20px monospace';
       ctx.fillText('// EXPERIENCE', 16, 32);
 
-      let y = 58;
+      let y = 52;
+      const entryH = 110;
       experienceData.forEach((exp) => {
         // Green left border
         ctx.fillStyle = '#22c55e';
-        ctx.fillRect(16, y, 3, 70);
+        ctx.fillRect(16, y, 3, entryH - 12);
 
         // Job title
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 14px monospace';
-        ctx.fillText(exp.title, 28, y + 14);
+        ctx.font = 'bold 13px monospace';
+        ctx.fillText(truncate(exp.title, 44), 28, y + 14);
 
-        // Company
+        // Company • Dates
         ctx.fillStyle = '#9ca3af';
-        ctx.font = '12px monospace';
-        ctx.fillText(`${exp.company} • ${exp.dates}`, 28, y + 30);
+        ctx.font = '11px monospace';
+        ctx.fillText(truncate(`${exp.company} • ${exp.dates}`, 56), 28, y + 30);
 
         // Bullets (first 2)
         ctx.fillStyle = '#e2e8f0';
         ctx.font = '11px monospace';
         exp.bullets.slice(0, 2).forEach((bullet, i) => {
-          const text = `→ ${bullet}`;
-          ctx.fillText(text.length > 58 ? text.substring(0, 55) + '...' : text, 28, y + 46 + i * 14);
+          ctx.fillText(truncate(`→ ${bullet}`, 60), 28, y + 48 + i * 14);
         });
 
         // Tags
         let tagX = 28;
-        const tagY = y + 78;
+        const tagY = y + 92;
         ctx.font = 'bold 9px monospace';
-        exp.tags.slice(0, 5).forEach((tag) => {
+        exp.tags.slice(0, 6).forEach((tag) => {
           const w = ctx.measureText(tag).width + 10;
+          if (tagX + w > W - 16) return;
           ctx.fillStyle = '#064e3b';
           ctx.fillRect(tagX, tagY - 9, w, 14);
           ctx.fillStyle = '#6ee7b7';
@@ -62,7 +68,7 @@ function useScreenTexture(type: 'experience' | 'projects') {
           tagX += w + 4;
         });
 
-        y += 100;
+        y += entryH;
       });
     } else {
       // Title
