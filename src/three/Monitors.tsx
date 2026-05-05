@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import type { ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { useStore } from '../store/useStore';
 import * as THREE from 'three';
@@ -230,7 +231,7 @@ export function Monitors() {
   const chromeMat = createRealisticMetal('#C0C0C0', 0.15, 0.2);
   const screenGlassMat = createRealisticScreen('#0A0A0A');
 
-  const handleMonitorClick = (isLeft: boolean, e: any) => {
+  const handleMonitorClick = (isLeft: boolean, e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
     setCameraTarget(isLeft ? 'leftMonitor' : 'rightMonitor');
   };

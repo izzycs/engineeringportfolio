@@ -4,17 +4,9 @@ import { Scene } from './three/Scene';
 import { Nav } from './components/Nav';
 import { ProjectModal } from './components/ProjectModal';
 import { ContactForm } from './components/ContactForm';
-import { PerformanceToggle } from './components/PerformanceToggle';
-import { Instructions } from './components/Instructions';
 import { BackButton } from './components/BackButton';
 import { LoadingScreen } from './components/LoadingScreen';
-import { KeyboardShortcuts } from './components/KeyboardShortcuts';
 import { useStore } from './store/useStore';
-// ROUND 10: New UI components
-import { TimeOfDayControl } from './three/TimeOfDayLighting';
-import { SoundControl } from './three/SoundEffects';
-import { AccessibilityPanel, SkipToContent } from './three/AccessibilityFeatures';
-// ROUND 11: Error handling and recovery
 import { ErrorBoundary, WebGLContextLossHandler } from './components/ErrorBoundary';
 
 function App() {
@@ -23,59 +15,45 @@ function App() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Detect mobile for camera positioning
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
-    // ROUND 11: Add WebGL context loss handling
     const cleanup = WebGLContextLossHandler();
-    
     return () => {
       window.removeEventListener('resize', checkMobile);
       cleanup?.();
     };
   }, []);
 
-  // Adjust camera for mobile - farther back for full room view
-  const cameraPosition: [number, number, number] = isMobile ? [0, 2.5, 8] : [0, 1.6, 5];
-  const cameraFov = isMobile ? 75 : 60;
+  const cameraPosition: [number, number, number] = isMobile ? [0, 2.2, 7] : [0, 1.6, 5];
+  const cameraFov = isMobile ? 70 : 55;
+  const dpr: [number, number] = isMobile ? [1, 1.25] : [1, Math.min(window.devicePixelRatio, 2)];
 
   return (
     <ErrorBoundary>
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
-      
-      <SkipToContent />
-      
+
       <Canvas
         shadows={!isMobile && quality === 'high'}
         camera={{ position: cameraPosition, fov: cameraFov }}
-        gl={{ 
-          antialias: !isMobile && quality === 'high',
+        gl={{
+          antialias: !isMobile,
           powerPreference: isMobile ? 'low-power' : 'high-performance',
           failIfMajorPerformanceCaveat: false,
+          alpha: false,
         }}
-        dpr={isMobile ? 1 : Math.min(window.devicePixelRatio, 2)}
+        dpr={dpr}
+        style={{ background: '#0b1020' }}
       >
+        <color attach="background" args={['#0b1020']} />
         <Scene />
       </Canvas>
-      
+
       <main id="main-content">
         <Nav />
-        <Instructions />
         <BackButton />
         <ProjectModal />
         <ContactForm />
-        <PerformanceToggle />
-        <KeyboardShortcuts />
-        
-        {/* ROUND 10: New UI Controls */}
-        <TimeOfDayControl />
-        <SoundControl />
-        <AccessibilityPanel />
       </main>
     </ErrorBoundary>
   );

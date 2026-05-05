@@ -2,20 +2,15 @@ import { useStore } from '../store/useStore';
 import { createRealisticWood } from './proceduralMaterials';
 
 const enhancedWalnut = createRealisticWood('#5C4A3D', 0.65);
-const basketball = {
-  color: '#E86A33',
-  roughness: 0.85,
-  metalness: 0.0,
-  envMapIntensity: 0.3,
-};
 
+// Data-engineering library — colors picked to match common O'Reilly / Manning palettes.
 const bookTitles = [
-  { title: 'One Piece', color: '#E63946', width: 0.04 },
-  { title: 'Hunter x Hunter', color: '#2A9D8F', width: 0.035 },
-  { title: 'Bleach', color: '#264653', width: 0.042 },
-  { title: 'Naruto', color: '#F4A261', width: 0.038 },
-  { title: 'Attack on Titan', color: '#E76F51', width: 0.045 },
-  { title: 'Demon Slayer', color: '#8338EC', width: 0.036 },
+  { title: 'Designing Data-Intensive Apps', color: '#1E3A5F', width: 0.045 },
+  { title: 'Fundamentals of Data Engineering', color: '#0F766E', width: 0.040 },
+  { title: 'The Data Warehouse Toolkit', color: '#7C2D12', width: 0.042 },
+  { title: 'Streaming Systems', color: '#374151', width: 0.038 },
+  { title: 'Spark: The Definitive Guide', color: '#B45309', width: 0.044 },
+  { title: 'SQL Cookbook', color: '#4B5563', width: 0.036 },
 ];
 
 function Book({ position, height, color, width = 0.04, tilt = 0 }: { 
@@ -156,43 +151,29 @@ export function Bookshelf() {
       <Book position={[-0.05, 1.6, 0.058]} height={0.21} color={bookTitles[2].color} width={bookTitles[2].width} tilt={0.02} />
       <Book position={[0.012, 1.64, 0.05]} height={0.27} color={bookTitles[3].color} width={bookTitles[3].width} tilt={-0.01} />
 
-      {/* NBA Basketball - on middle shelf */}
-      <mesh position={[0.15, 1.2, 0.05]} castShadow={castShadow}>
-        <sphereGeometry args={[0.06, 20, 20]} />
-        <meshStandardMaterial {...basketball} />
-      </mesh>
-      
-      {/* Basketball Black Lines - Simplified */}
-      <mesh position={[0.15, 1.2, 0.05]} castShadow={false}>
-        <sphereGeometry args={[0.061, 20, 20]} />
-        <meshBasicMaterial 
-          color="#000000"
-          transparent
-          opacity={0.15}
-          wireframe
-        />
-      </mesh>
+      {/* Mini server-rack ornament (data-engineer flavor) */}
+      <group position={[0.18, 1.18, 0.05]}>
+        <mesh castShadow={castShadow}>
+          <boxGeometry args={[0.14, 0.1, 0.12]} />
+          <meshStandardMaterial color="#1F2937" roughness={0.6} metalness={0.3} />
+        </mesh>
+        {[0.025, 0, -0.025].map((y) => (
+          <mesh key={y} position={[0, y, 0.061]}>
+            <boxGeometry args={[0.12, 0.012, 0.001]} />
+            <meshStandardMaterial color="#10B981" emissive="#10B981" emissiveIntensity={0.6} />
+          </mesh>
+        ))}
+      </group>
 
-      {/* Anime Figurine - on top shelf (simple humanoid shape) */}
-      <group position={[0.25, 1.68, 0.05]}>
-        {/* Head */}
-        <mesh position={[0, 0.08, 0]} castShadow={castShadow}>
-          <sphereGeometry args={[0.025, 8, 8]} />
-          <meshStandardMaterial color="#FFD1BA" roughness={0.7} />
+      {/* Coffee mug — staple data-engineer prop */}
+      <group position={[0.22, 1.68, 0.05]}>
+        <mesh castShadow={castShadow}>
+          <cylinderGeometry args={[0.03, 0.025, 0.06, 24]} />
+          <meshStandardMaterial color="#F3F4F6" roughness={0.5} />
         </mesh>
-        {/* Body */}
-        <mesh position={[0, 0.04, 0]} castShadow={castShadow}>
-          <boxGeometry args={[0.035, 0.06, 0.02]} />
-          <meshStandardMaterial color="#2196F3" roughness={0.7} />
-        </mesh>
-        {/* Legs */}
-        <mesh position={[-0.01, -0.01, 0]} castShadow={castShadow}>
-          <boxGeometry args={[0.012, 0.04, 0.015]} />
-          <meshStandardMaterial color="#1565C0" roughness={0.7} />
-        </mesh>
-        <mesh position={[0.01, -0.01, 0]} castShadow={castShadow}>
-          <boxGeometry args={[0.012, 0.04, 0.015]} />
-          <meshStandardMaterial color="#1565C0" roughness={0.7} />
+        <mesh position={[0, 0.026, 0]}>
+          <cylinderGeometry args={[0.026, 0.026, 0.005, 24]} />
+          <meshStandardMaterial color="#3B2415" roughness={0.4} />
         </mesh>
       </group>
 

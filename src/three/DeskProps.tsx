@@ -3,7 +3,6 @@ import { useFrame } from '@react-three/fiber';
 import { useStore } from '../store/useStore';
 import * as THREE from 'three';
 import { createRealisticPlastic, createRealisticMetal } from './proceduralMaterials';
-import { PlantLeafMovement, CableSag } from './SubtleAnimations';
 
 // Enhanced materials
 const plasticABS = createRealisticPlastic('#2A2A2A', true);
@@ -267,7 +266,7 @@ export function DeskProps() {
       </group>
 
       {/* Desk Plant - Back-right corner with Terracotta Pot */}
-      <PlantLeafMovement position={[0.55, 0.02, -0.35]} windStrength={0.003}>
+      <group position={[0.55, 0.02, -0.35]}>
         <group>
           {/* Pot - terracotta cylinder */}
           <mesh castShadow={castShadow}>
@@ -334,7 +333,7 @@ export function DeskProps() {
             <meshStandardMaterial color="#66BB6A" roughness={0.6} metalness={0.0} />
           </mesh>
         </group>
-      </PlantLeafMovement>
+      </group>
 
       {/* Headphone Stand - Back-left area near monitor arm */}
       <group position={[-0.45, 0.02, -0.25]}>
@@ -387,37 +386,6 @@ export function DeskProps() {
           <meshStandardMaterial color="#2A2A2A" roughness={0.85} metalness={0.0} />
         </mesh>
       </group>
-      
-      {/* Cable Management - Sagging cables with physics */}
-      {/* Keyboard cable to desk edge */}
-      <CableSag 
-        start={[0, 0.015, 0.275]} 
-        end={[0, -0.2, -0.5]} 
-        segments={16}
-        sagAmount={0.08}
-        color="#1A1A1A"
-        thickness={0.003}
-      />
-      
-      {/* Monitor power cable (left) */}
-      <CableSag 
-        start={[-0.65, -0.35, -0.05]} 
-        end={[0, -0.5, -0.5]} 
-        segments={20}
-        sagAmount={0.12}
-        color="#0A0A0A"
-        thickness={0.005}
-      />
-      
-      {/* Monitor display cable (right) */}
-      <CableSag 
-        start={[0.65, -0.35, -0.05]} 
-        end={[0, -0.5, -0.5]} 
-        segments={20}
-        sagAmount={0.1}
-        color="#2A2A2A"
-        thickness={0.004}
-      />
       
       {/* USB hub on desk - small black box */}
       <group position={[-0.5, 0.015, 0.4]}>

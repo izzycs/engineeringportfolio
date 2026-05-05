@@ -1,180 +1,85 @@
-import { useRef } from 'react';
-import { OrbitControls, Environment } from '@react-three/drei';
+import { useMemo, useRef } from 'react';
+import { OrbitControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useStore, cameraPositions } from '../store/useStore';
 import * as THREE from 'three';
 import { RoomShell } from './RoomShell';
 import { Desk } from './Desk';
 import { Monitors } from './Monitors';
 import { Bookshelf } from './Bookshelf';
-import { TV } from './TV';
 import { EnhancedWindow } from './EnhancedWindow';
 import { DeskProps } from './DeskProps';
 import { DeskLamp } from './DeskLamp';
-import { WallDecor } from './WallDecor';
 import { Chair } from './Chair';
-import { CeilingFan } from './CeilingFan';
-import { GitHubCalendar } from './GitHubCalendar';
-// ROUND 9: Use photorealistic animations
-import { EnhancedChairSway, EnhancedFanRotation } from './PhotorealisticAnimations';
-import { useDeviceOptimizations } from './PerformanceOptimizations';
-// ROUND 11: Lazy load heavy components to reduce bundle size
-import { LazyEasterEggs, LazyAdvancedEasterEggs, LazyPostProcessing } from './LazyComponents';
-// ROUND 10: Personal touches and interactive elements
-import { 
-  DeskNameplate, 
-  DataEngineeringBooks, 
-  PersonalPhotos, 
-  NBAMerchandise,
-  AnimeCollectibles,
-  WaterBottle,
-  DeskSnacks,
-  ChargingDevices,
-  PostItNotes,
-  PoweredLaptop,
-} from './PersonalTouches';
-import { DataVizPrints, AwardsCertificates, Whiteboard, Calendar2026 } from './DataVizWallArt';
-import { 
-  InteractiveCoffeeMug, 
-  BouncingBasketball, 
-  InteractivePlant 
-} from './InteractiveElements';
-import { TimeOfDayLighting } from './TimeOfDayLighting';
 
 export function Scene() {
   const { camera } = useThree();
-  const controlsRef = useRef<any>(null);
+  const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const cameraTarget = useStore((state) => state.cameraTarget);
   const quality = useStore((state) => state.quality);
-  
-  // ROUND 9: Get device-specific optimizations
-  const deviceSettings = useDeviceOptimizations();
-  const isMobile = deviceSettings.isMobile;
 
-  // Smooth camera transitions
+  const isMobile = useMemo(
+    () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+    [],
+  );
+  const enableShadows = !isMobile && quality === 'high';
+
   useFrame(() => {
     if (controlsRef.current && cameraTarget) {
       const targetPos = cameraPositions[cameraTarget];
-      
-      // Lerp camera position
-      camera.position.lerp(
-        new THREE.Vector3(...targetPos.position),
-        0.05
-      );
-      
-      // Lerp controls target
-      controlsRef.current.target.lerp(
-        new THREE.Vector3(...targetPos.target),
-        0.05
-      );
+      camera.position.lerp(new THREE.Vector3(...targetPos.position), 0.05);
+      controlsRef.current.target.lerp(new THREE.Vector3(...targetPos.target), 0.05);
     }
   });
 
   return (
     <>
-      {/* Environment Map for Realistic Reflections - skip on mobile to save GPU memory */}
-      {!isMobile && (
-        <Environment 
-          preset="apartment"
-          environmentIntensity={0.8}
-        />
-      )}
-      
-      {/* Subtle Fog for Atmosphere (disabled on low quality) */}
-      {quality !== 'low' && <fog attach="fog" args={['#E8E4DC', 8, 18]} />}
+      {/* Stable three-point light rig — replaces the time-of-day system that caused flicker. */}
+      <ambientLight intensity={0.55} color="#FFF6E8" />
+      <hemisphereLight args={['#FFF6E8', '#9AA5B6', 0.35]} />
+      <directionalLight
+        position={[4, 6, 4]}
+        intensity={1.1}
+        color="#FFE9C4"
+        castShadow={enableShadows}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-near={0.5}
+        shadow-camera-far={20}
+        shadow-camera-left={-6}
+        shadow-camera-right={6}
+        shadow-camera-top={6}
+        shadow-camera-bottom={-6}
+        shadow-bias={-0.0005}
+      />
+      <directionalLight position={[-3, 4, 2]} intensity={0.25} color="#A8C8FF" />
 
-      {/* ROUND 10: TIME-OF-DAY LIGHTING SYSTEM (replaces PhotorealisticLighting) */}
-      <TimeOfDayLighting />
-      
-      {/* ROUND 9: POST-PROCESSING EFFECTS (high quality only) */}
-      {/* ROUND 11: Lazy loaded to reduce bundle size */}
-      {deviceSettings.enablePostProcessing && <LazyPostProcessing />}
-
-      {/* Camera Controls - 360 rotation enabled */}
       <OrbitControls
         ref={controlsRef}
         enableDamping
-        dampingFactor={0.05}
-        enableRotate={true}
-        rotateSpeed={deviceSettings.isMobile ? 1.2 : 1.5}
-        enablePan={true}
-        panSpeed={deviceSettings.isMobile ? 0.8 : 1}
+        dampingFactor={0.08}
+        rotateSpeed={isMobile ? 0.7 : 0.9}
+        enablePan={false}
         minDistance={3}
-        maxDistance={12}
+        maxDistance={9}
+        minPolarAngle={Math.PI / 6}
+        maxPolarAngle={Math.PI / 2.05}
         target={[0, 1.2, 0]}
-        // ROUND 9: Touch controls for mobile
         touches={{
           ONE: THREE.TOUCH.ROTATE,
           TWO: THREE.TOUCH.DOLLY_PAN,
         }}
       />
 
-      {/* Click anywhere in room to reset view */}
-      <mesh
-        visible={false}
-        position={[0, 2.5, 0]}
-        onClick={() => {
-          const target = useStore.getState().cameraTarget;
-          if (target !== 'default') {
-            useStore.getState().setCameraTarget('default');
-          }
-        }}
-      >
-        <boxGeometry args={[12, 6, 12]} />
-        <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
-      </mesh>
-
-      {/* Scene Objects with Photorealistic Materials */}
       <RoomShell />
       <Desk />
-      
-      {/* ROUND 9: Enhanced Chair Sway with Spring Physics */}
-      <EnhancedChairSway position={[0.8, 0, -0.3]}>
-        <Chair />
-      </EnhancedChairSway>
-      
+      <Chair />
       <Monitors />
       <DeskProps />
       <DeskLamp />
       <Bookshelf />
-      <TV />
       <EnhancedWindow />
-      <WallDecor />
-      
-      {/* ROUND 9: Enhanced Fan Rotation */}
-      <EnhancedFanRotation position={[0, 2.7, 0]} speed={0.5}>
-        <CeilingFan />
-      </EnhancedFanRotation>
-      
-      {/* ROUND 11: Lazy loaded to reduce initial bundle size */}
-      {!isMobile && <LazyEasterEggs />}
-      <GitHubCalendar />
-      
-      {/* ROUND 10: PERSONAL TOUCHES - reduced set on mobile */}
-      <DeskNameplate />
-      {!isMobile && <DataEngineeringBooks />}
-      {!isMobile && <PersonalPhotos />}
-      {!isMobile && <NBAMerchandise />}
-      {!isMobile && <AnimeCollectibles />}
-      <WaterBottle />
-      {!isMobile && <DeskSnacks />}
-      {!isMobile && <ChargingDevices />}
-      {!isMobile && <PostItNotes />}
-      {!isMobile && <PoweredLaptop />}
-      
-      {/* ROUND 10: WALL DECORATIONS - reduced on mobile */}
-      {!isMobile && <DataVizPrints />}
-      {!isMobile && <AwardsCertificates />}
-      {!isMobile && <Whiteboard />}
-      {!isMobile && <Calendar2026 />}
-      
-      {/* ROUND 10: INTERACTIVE ELEMENTS - skip on mobile */}
-      {!isMobile && <InteractiveCoffeeMug position={[0.35, 0.04, 0.55]} />}
-      {!isMobile && <BouncingBasketball initialPosition={[0.5, 0.76, -0.1]} />}
-      {!isMobile && <InteractivePlant position={[0.55, 0.02, -0.35]} />}
-      
-      {/* ROUND 10: ADVANCED EASTER EGGS - desktop only */}
-      {!isMobile && <LazyAdvancedEasterEggs />}
     </>
   );
 }
