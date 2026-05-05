@@ -1,6 +1,7 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { OrbitControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useStore, cameraPositions } from '../store/useStore';
 import * as THREE from 'three';
 import { RoomShell } from './RoomShell';
@@ -11,16 +12,17 @@ import { EnhancedWindow } from './EnhancedWindow';
 import { DeskProps } from './DeskProps';
 import { DeskLamp } from './DeskLamp';
 import { Chair } from './Chair';
-import { useDeviceOptimizations } from './PerformanceOptimizations';
 
 export function Scene() {
   const { camera } = useThree();
-  const controlsRef = useRef<any>(null);
+  const controlsRef = useRef<OrbitControlsImpl | null>(null);
   const cameraTarget = useStore((state) => state.cameraTarget);
   const quality = useStore((state) => state.quality);
 
-  const deviceSettings = useDeviceOptimizations();
-  const isMobile = deviceSettings.isMobile;
+  const isMobile = useMemo(
+    () => /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+    [],
+  );
   const enableShadows = !isMobile && quality === 'high';
 
   useFrame(() => {

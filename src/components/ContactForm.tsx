@@ -32,7 +32,7 @@ export function ContactForm() {
         setStatus('idle');
         setShowContactForm(false);
       }, 2000);
-    } catch (error) {
+    } catch {
       setStatus('error');
       setTimeout(() => setStatus('idle'), 3000);
     }

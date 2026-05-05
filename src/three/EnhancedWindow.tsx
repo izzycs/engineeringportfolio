@@ -16,19 +16,21 @@ export function EnhancedWindow() {
     }
   });
   
-  // Generate cloud geometry
-  const clouds = useMemo(() => {
-    const cloudData = [];
-    for (let i = 0; i < 8; i++) {
-      cloudData.push({
-        x: Math.random() * 20 - 10,
-        y: 1.5 + Math.random() * 1.5,
-        z: -4.9,
-        scale: 0.3 + Math.random() * 0.4,
-      });
-    }
-    return cloudData;
-  }, []);
+  // Stable, deterministic cloud layout — Math.random() in render breaks
+  // react-hooks/purity. Hand-tuned positions also look better than RNG.
+  const clouds = useMemo(
+    () => [
+      { x: -8.2, y: 2.4, z: -4.9, scale: 0.42 },
+      { x: -5.6, y: 2.9, z: -4.9, scale: 0.55 },
+      { x: -2.9, y: 2.1, z: -4.9, scale: 0.38 },
+      { x: -0.4, y: 2.7, z: -4.9, scale: 0.5 },
+      { x: 2.1, y: 2.3, z: -4.9, scale: 0.45 },
+      { x: 4.7, y: 2.8, z: -4.9, scale: 0.6 },
+      { x: 6.9, y: 2.2, z: -4.9, scale: 0.4 },
+      { x: 9.1, y: 2.6, z: -4.9, scale: 0.48 },
+    ],
+    [],
+  );
   
   return (
     <group position={[0, 0, 0]}>
